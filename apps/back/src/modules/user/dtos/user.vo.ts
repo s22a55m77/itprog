@@ -4,13 +4,17 @@ import { RoleType } from '../../../constants';
 import type { UserEntity } from '../user.entity';
 
 export class UserVo {
-  constructor(userEntity: UserEntity) {
-    this.username = userEntity.username;
-  }
-
   @ApiProperty()
   username: string;
 
   @ApiProperty({ enum: RoleType })
   role: RoleType;
+
+  public static fromEntity(userEntity: UserEntity): UserVo {
+    const userVo = new UserVo();
+    userVo.username = userEntity.username;
+    userVo.role = userEntity.role;
+
+    return userVo;
+  }
 }

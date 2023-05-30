@@ -1,5 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Version } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Builder } from 'builder-pattern';
 
 import { ResponseVo } from '../../common/vo/response.vo';
 import { RoleType } from '../../constants';
@@ -32,7 +33,9 @@ export class AuthController {
       role: userEntity.role,
     });
 
-    return new ResponseVo<LoginVo>(new LoginVo(new UserVo(userEntity), token));
+    const loginVo = Builder<LoginVo>().user(UserVo.fromEntity(userEntity)).token(token).build();
+
+    return ResponseVo.Success<LoginVo>(loginVo);
   }
 
   @Post('register')
@@ -41,7 +44,7 @@ export class AuthController {
   async userRegister(@Body() userRegisterDto: UserRegisterDto): Promise<ResponseVo<UserVo>> {
     const createdUser = await this.userService.createUser(userRegisterDto);
 
-    return new ResponseVo<UserVo>(new UserVo(createdUser));
+    return ResponseVo.Success<UserVo>(UserVo.fromEntity(createdUser));
   }
 
   @Version('1')
@@ -50,6 +53,6 @@ export class AuthController {
   @Auth([RoleType.USER, RoleType.ADMIN])
   @ApiResponse({ type: UserVo, description: 'current user info', httpStatus: HttpStatus.OK })
   getCurrentUser(@AuthUser() user: UserEntity): ResponseVo<UserVo> {
-    return new ResponseVo<UserVo>(new UserVo(user));
+    return ResponseVo.Success<UserVo>(UserVo.fromEntity(user));
   }
 }
