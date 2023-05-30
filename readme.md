@@ -13,8 +13,8 @@ front = http://localhost:3000/
 - everything push to github will be automatically deployed to azure
 
 backend = https://itprog-back.azurewebsites.net/ \
-backend documentation = https://itprog-back.azurewebsites.net/documentation \
-front = 
+backend documentation = https://itprog-back.azurewebsites.net/documentation/ \
+front = https://itprog-front.azurewebsites.net/
 
 # Naming Convention
 ## SQL
