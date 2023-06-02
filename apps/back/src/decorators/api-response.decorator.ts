@@ -1,5 +1,6 @@
 import type { HttpStatus, Type } from '@nestjs/common';
 import { applyDecorators } from '@nestjs/common';
+import type { ApiResponseOptions } from '@nestjs/swagger';
 import { ApiExtraModels, ApiResponse as SwaggerApiResponse, getSchemaPath } from '@nestjs/swagger';
 
 import { ResponseVo } from '../common/vo/response.vo';
@@ -8,6 +9,7 @@ export function ApiResponse<T extends Type>(options: {
   type: T;
   description?: string;
   httpStatus: HttpStatus;
+  options?: ApiResponseOptions;
 }): MethodDecorator {
   return applyDecorators(
     ApiExtraModels(ResponseVo),
@@ -28,6 +30,7 @@ export function ApiResponse<T extends Type>(options: {
           },
         ],
       },
+      ...options.options,
     }),
   );
 }

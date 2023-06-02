@@ -14,6 +14,7 @@ import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './filters/bad-request.filter';
+import { ExceptionsFilter } from './filters/exceptions.filter';
 import { setupSwagger } from './setup-swagger';
 import { ApiConfigService } from './shared/services/api-config.service';
 import { SharedModule } from './shared/shared.module';
@@ -29,7 +30,7 @@ export async function bootstrap(): Promise<NestExpressApplication> {
 
   const reflector = app.get(Reflector);
 
-  app.useGlobalFilters(new HttpExceptionFilter(reflector));
+  app.useGlobalFilters(new ExceptionsFilter(), new HttpExceptionFilter(reflector));
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 

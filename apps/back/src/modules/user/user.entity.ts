@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { RoleType } from '../../constants';
+import { OrderEntity } from '../order/order.entity';
 
 export interface IUserEntity {
   role: RoleType;
@@ -23,4 +24,7 @@ export class UserEntity implements IUserEntity {
 
   @Column()
   password: string;
+
+  @OneToMany(() => OrderEntity, (orderEntity) => orderEntity.user)
+  orders: OrderEntity[];
 }

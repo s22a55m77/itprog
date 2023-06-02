@@ -2,13 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class ResponseVo<T> {
   @ApiProperty()
-  msg: string;
+  msg: string | null;
 
   @ApiProperty()
-  error: string;
+  error: string | null;
 
   @ApiProperty()
-  data: T;
+  data: T | null;
 
   @ApiProperty()
   success: boolean;
@@ -23,15 +23,19 @@ export class ResponseVo<T> {
   public static Success<T>(data: T): ResponseVo<T> {
     const responseVo = new ResponseVo<T>();
 
+    responseVo.msg = null;
+    responseVo.error = null;
     responseVo.data = data;
     responseVo.success = true;
 
     return responseVo;
   }
 
-  public Error(e: Error): ResponseVo<T> {
-    const responseVo = new ResponseVo<T>();
+  public static Error(e: Error): ResponseVo<null> {
+    const responseVo = new ResponseVo<null>();
 
+    responseVo.data = null;
+    responseVo.msg = e.message;
     responseVo.error = e.name;
     responseVo.success = false;
 

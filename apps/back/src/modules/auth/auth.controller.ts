@@ -9,9 +9,9 @@ import { UserVo } from '../user/dtos/user.vo';
 import { UserEntity } from '../user/user.entity';
 import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
-import { LoginVo } from './dto/Login.vo';
 import { UserLoginDto } from './dto/UserLogin.dto';
 import { UserRegisterDto } from './dto/UserRegister.dto';
+import { LoginVo } from './vo/Login.vo';
 
 @Controller('auth')
 @ApiTags('auth')
