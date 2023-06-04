@@ -10,6 +10,10 @@ export class CategoryService {
     @InjectRepository(CategoryEntity) private categoryRepository: Repository<CategoryEntity>,
   ) {}
 
+  getCategories(): Promise<CategoryEntity[]> {
+    return this.categoryRepository.find();
+  }
+
   getCategoryById(id: number) {
     return this.categoryRepository
       .findOneOrFail({
