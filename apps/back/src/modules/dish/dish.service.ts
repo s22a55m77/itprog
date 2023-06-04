@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -14,5 +14,17 @@ export class DishService {
         categoryId,
       },
     });
+  }
+
+  getDishById(dishId: number): Promise<DishEntity> {
+    return this.dishRepository
+      .findOneOrFail({
+        where: {
+          id: dishId,
+        },
+      })
+      .catch(() => {
+        throw new NotFoundException('No such dish');
+      });
   }
 }

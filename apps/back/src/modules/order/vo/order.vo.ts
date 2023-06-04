@@ -42,7 +42,7 @@ export class OrderVo {
         .build();
     }
 
-    if (Array.isArray(order) && order[0] instanceof OrderEntity) {
+    if (Array.isArray(order)) {
       const orderDetailsVo = order.map((singleOrder: OrderEntity): OrderDetailsVo => {
         return Builder<OrderDetailsVo>()
           .dishId(singleOrder.dishId)
@@ -51,8 +51,8 @@ export class OrderVo {
       });
 
       return Builder<OrderVo>()
-        .orderNumber(order[0].orderNumber)
-        .status(order[0].status)
+        .orderNumber(order[0].orderNumber as string)
+        .status(order[0].status as OrderStatus)
         .details(orderDetailsVo)
         .build();
     }

@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { ResponseVo } from '../../common/vo/response.vo';
 import { ApiResponse } from '../../decorators';
 import { ComboService } from '../combo/combo.service';
+import { DishService } from '../dish/dish.service';
 import { AddOrderDto } from './dto/add-order.dto';
 import type { OrderEntity } from './order.entity';
 import { OrderService } from './order.service';
@@ -14,11 +15,15 @@ import { OrderVo } from './vo/order.vo';
 @Controller('order')
 @ApiTags('Order')
 export class OrderController {
-  constructor(private orderService: OrderService, private comboService: ComboService) {}
+  constructor(
+    private orderService: OrderService,
+    private comboService: ComboService,
+    private dishService: DishService,
+  ) {}
 
   @ApiResponse({
     type: OrderVo,
-    httpStatus: HttpStatus.OK,
+    httpStatus: HttpStatus.CREATED,
     options: {
       isArray: true,
     },
@@ -48,14 +53,13 @@ export class OrderController {
     // Process Entity to Vo
     const orderVo: OrderVo = OrderVo.fromEntity(insertedEntities);
 
-    // Get the Combo according to dishes
     const combo = await this.comboService.getComboByDishes(dishIds);
 
-    // If there is a combo
     if (combo) {
       orderVo.combo = combo.name;
-      // TODO do the price calculation here
     }
+
+    orderVo.price = await this.orderService.getPriceByOrder(orderNumber);
 
     return ResponseVo.Success(orderVo);
   }
