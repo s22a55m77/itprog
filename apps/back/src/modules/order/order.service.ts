@@ -36,4 +36,12 @@ export class OrderService {
 
     return insertedOrderEntities;
   }
+
+  getOrdersByUserId(userId: number) {
+    return this.orderRepository.find({
+      where: {
+        userId,
+      },
+    });
+  }
 }

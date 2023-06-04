@@ -1,6 +1,7 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, HttpStatus, Post } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
+import _ from 'lodash';
 
 import { ResponseVo } from '../../common/vo/response.vo';
 import { ApiResponse } from '../../decorators';
@@ -57,5 +58,31 @@ export class OrderController {
     }
 
     return ResponseVo.Success(orderVo);
+  }
+
+  @ApiOperation({
+    summary: 'Get All Orders of User',
+  })
+  @ApiResponse({
+    type: OrderVo,
+    httpStatus: HttpStatus.OK,
+    options: {
+      isArray: true,
+    },
+  })
+  @Get()
+  async getOrderByUserId(): Promise<OrderVo[]> {
+    // TODO make this endpoint authenticated
+    const userId = 1;
+
+    // the result may contains different orders
+    const orderEntities = await this.orderService.getOrdersByUserId(userId);
+
+    // grouped order base on the order number
+    const groupedOrder = _.toArray(_.groupBy(orderEntities, 'orderNumber'));
+
+    return groupedOrder.map((orders: OrderEntity[]) => {
+      return OrderVo.fromEntity(orders);
+    });
   }
 }
