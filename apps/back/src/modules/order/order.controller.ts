@@ -117,7 +117,7 @@ export class OrderController {
     },
   })
   @Get()
-  async getOrderByUserId(): Promise<OrderVo[]> {
+  async getOrderByUserId(): Promise<ResponseVo<OrderVo[]>> {
     // TODO make this endpoint authenticated
     const userId = 1;
 
@@ -127,8 +127,10 @@ export class OrderController {
     // grouped order base on the order number
     const groupedOrder = _.toArray(_.groupBy(orderEntities, 'orderNumber'));
 
-    return groupedOrder.map((orders: OrderEntity[]) => {
+    const orderVo = groupedOrder.map((orders: OrderEntity[]) => {
       return OrderVo.fromEntity(orders);
     });
+
+    return ResponseVo.Success(orderVo);
   }
 }
