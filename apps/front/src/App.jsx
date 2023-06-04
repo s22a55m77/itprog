@@ -1,27 +1,23 @@
-import logo from './logo.svg';
 import './App.css';
-import SwiperCard from './components/Swiper/Swiper'
+import Children from './components';
+import { createContext, useState } from 'react';
+import Navbar from './components/Navbar/Navbar';
+
+export const CarContext = createContext(null);
 
 function App() {
+  const [car, setCar] = useState([]);
+
+  const changeCar = (value) => {
+    setCar(car.push(value))
+  }
+
   return (
     <div className="App">
-      <div
-      key={"Navbar"}
-      style={{
-        width: "100vm",
-        height: "60px",
-        backgroundColor: "black",
-      }}>
-      </div>
-      <SwiperCard />
-      <div style={{
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'space-around',
-      }}>
-
-        {/*<SwiperCard />*/}
-      </div>
+      <CarContext.Provider value={{ car, changeCar }}>
+        <Navbar />
+        <Children />
+      </CarContext.Provider>
     </div>
   );
 }
