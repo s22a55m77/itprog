@@ -21,6 +21,9 @@ export class OrderController {
     private dishService: DishService,
   ) {}
 
+  @ApiOperation({
+    summary: 'add order',
+  })
   @ApiResponse({
     type: OrderVo,
     httpStatus: HttpStatus.CREATED,
@@ -55,10 +58,7 @@ export class OrderController {
 
     const combo = await this.comboService.getComboByDishes(dishIds);
 
-    if (combo) {
-      orderVo.combo = combo.name;
-    }
-
+    orderVo.combo = combo?.name;
     orderVo.price = await this.orderService.getPriceByOrder(orderNumber);
 
     return ResponseVo.Success(orderVo);

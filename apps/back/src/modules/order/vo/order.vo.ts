@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 
 import { OrderStatus } from '../../../constants';
@@ -25,8 +25,10 @@ export class OrderVo {
   @ApiProperty()
   price: number;
 
-  @ApiProperty()
-  combo: string;
+  @ApiPropertyOptional({
+    description: 'Will not have combo name if there is no combo',
+  })
+  combo?: string;
 
   static fromEntity(order: OrderEntity | OrderEntity[]): OrderVo {
     if (order instanceof OrderEntity && !Array.isArray(order)) {
