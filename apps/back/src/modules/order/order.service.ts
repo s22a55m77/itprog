@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import _ from 'lodash';
 import { Repository } from 'typeorm';
 
+import { OrderStatus } from '../../constants';
 import { ComboService } from '../combo/combo.service';
 import { DishService } from '../dish/dish.service';
 import { OrderEntity } from './order.entity';
@@ -121,5 +122,17 @@ export class OrderService {
     }
 
     return price;
+  }
+
+  getOrdersByOrderNumber(orderNumber: string): Promise<OrderEntity[]> {
+    return this.orderRepository.find({
+      where: {
+        orderNumber,
+      },
+    });
+  }
+
+  async markCompleted(orderNumber: string) {
+    await this.orderRepository.update({ orderNumber }, { status: OrderStatus.COMPLETED });
   }
 }
