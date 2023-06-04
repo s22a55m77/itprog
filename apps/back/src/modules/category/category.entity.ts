@@ -13,6 +13,8 @@ export class CategoryEntity {
   @Column({ type: 'varchar' })
   name: string;
 
-  @OneToMany(() => DishEntity, (dishEntity) => dishEntity.category)
+  @OneToMany(() => DishEntity, (dishEntity) => dishEntity.category, {
+    createForeignKeyConstraints: false,
+  })
   dishes: DishEntity[];
 }

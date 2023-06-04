@@ -1,11 +1,12 @@
 import {
-  BeforeInsert,
   BeforeUpdate,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import { OrderStatus } from '../../constants';
@@ -52,23 +53,19 @@ export class OrderEntity {
   @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.PENDING_PAYMENT })
   status: OrderStatus;
 
-  @Column({ type: 'datetime' })
+  @CreateDateColumn({ type: 'datetime' })
   createdAt: Date;
 
-  @Column({ type: 'datetime' })
+  @UpdateDateColumn({ type: 'datetime' })
   updatedAt: Date;
 
   @Column({ type: 'datetime', nullable: true })
   completedAt: Date;
 
-  @BeforeInsert()
-  beforeInsert() {
-    this.updatedAt = new Date();
-    this.createdAt = new Date();
-  }
-
   @BeforeUpdate()
   beforeUpdate() {
-    this.updatedAt = new Date();
+    if (this.status === OrderStatus.COMPLETED) {
+      this.completedAt = new Date();
+    }
   }
 }
