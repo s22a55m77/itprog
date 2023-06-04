@@ -1,4 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from 'react';
+import { CarContext } from '../../App';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -10,16 +11,27 @@ import './swiper.css'
 
 // import required modules
 import { Mousewheel, EffectCoverflow, Pagination } from "swiper";
+import DishCard from '../DishCard/DishCard';
 
-export default function App() {
-  const ref = useRef();
-
+export default function SwiperCard() {
   const change = (data) => {
     console.log(data.realIndex);
   };
 
   return (
     <>
+      <h2
+        style={{
+          display: 'flex',
+          justifyContent: 'left',
+          marginLeft: '10px',
+          marginBottom: '-50px',
+          border: '1px black',
+          borderRadius: '50%',
+        }}
+      >
+        Main
+      </h2>
       <div style={{
         position: 'relative',
         marginTop: '10px',
@@ -46,9 +58,9 @@ export default function App() {
           }}
           modules={[Mousewheel, EffectCoverflow, Pagination]}
         >
-          <SwiperSlide>Slide 1</SwiperSlide>
-          <SwiperSlide>Slide 2</SwiperSlide>
-          <SwiperSlide>Slide 3</SwiperSlide>
+          <SwiperSlide><DishCard /></SwiperSlide>
+          <SwiperSlide><DishCard /></SwiperSlide>
+          <SwiperSlide><DishCard /></SwiperSlide>
         </Swiper>
       </div>
     </>

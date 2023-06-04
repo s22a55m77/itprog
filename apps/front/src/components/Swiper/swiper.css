@@ -4,17 +4,22 @@
 }
 
 .swiper-slide {
-    height: 300px !important;
-    /*width: 200px;*/
+    height: 250px !important;
+    /*width: 00px !important;*/
     text-align: center;
     font-size: 18px;
-    background: #fff;
 
     /* Center slide text vertically */
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #61dafb;
+
+    /* Disable Select */
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .swiper-slide img {
