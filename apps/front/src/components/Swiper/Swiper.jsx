@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
-import { CarContext } from '../../App';
+import { CartContext } from '../../App';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -17,32 +17,52 @@ import { getDish } from '../../services/api';
 export default function SwiperCard({category}) {
   const [dishes, setDishes] = useState([]);
 
+  const cart = useContext(CartContext)
+
+
   useEffect(() => {
-    getDish(category.id).then((res) => {
-      if (res.error == null)
-        setDishes(res.data);
-    })
-  }, [category.id])
+    if(dishes.length <= 0)
+      getDish(category.id).then((res) => {
+        if (res.error == null)
+          setDishes(res.data);
+      })
+
+    if(dishes.length > 0) {
+      const index = cart.cart.findIndex(x => x.categoryId === category.id);
+      if (cart.cart[index] && dishes[1]) {
+        cart.cart[index].dish.name = dishes[1].name
+      }
+    }
+
+
+  }, [category.id, dishes])
 
 
   const change = (data) => {
-    console.log(data.realIndex);
+    const index = cart.cart.findIndex(x => x.categoryId === category.id);
+    if (cart.cart[index] && dishes[data.realIndex]) {
+      cart.cart[index].dish.name = dishes[data.realIndex].name
+    }
   };
 
   return (
     <>
-      <h2
+      <div
         style={{
           display: 'flex',
           justifyContent: 'left',
           marginLeft: '10px',
           marginBottom: '-50px',
-          border: '1px black',
-          borderRadius: '50%',
         }}
       >
-        {category.name}
-      </h2>
+        <h2
+          style={{
+            padding: '5px',
+          }}
+        >
+          {category.name}
+        </h2>
+      </div>
       <div
         style={{
           position: 'relative',

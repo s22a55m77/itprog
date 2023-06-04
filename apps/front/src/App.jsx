@@ -1,23 +1,36 @@
 import './App.css';
 import Children from './components';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import Navbar from './components/Navbar/Navbar';
 
-export const CarContext = createContext(null);
+export const CartContext = createContext([]);
 
 function App() {
-  const [car, setCar] = useState([]);
+  const [cart, setCart] = useState([]);
 
-  const changeCar = (value) => {
-    setCar(car.push(value))
+  const addCart = (obj) => {
+    const arr = cart
+    arr.push(obj)
+
+    const uniqueArr = arr.filter((arrItem, index, self) => {
+      // Check if the current menu item's categoryId is unique
+      return (
+        index ===
+        self.findIndex((item) => item.categoryId === arrItem.categoryId)
+      );
+    });
+
+
+    setCart(uniqueArr);
   }
+
 
   return (
     <div className="App">
-      <CarContext.Provider value={{ car, changeCar }}>
+      <CartContext.Provider value={{ cart, addCart }}>
         <Navbar />
         <Children />
-      </CarContext.Provider>
+      </CartContext.Provider>
     </div>
   );
 }

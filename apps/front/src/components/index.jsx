@@ -1,16 +1,37 @@
 import SwiperCard from './Swiper/Swiper';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getCategory } from '../services/api';
+import { CartContext } from '../App';
 
 export default function Children() {
   const [category, setCategory] = useState([]);
+  const cart = useContext(CartContext);
 
   useEffect(() => {
-    getCategory().then((res) => {
-      if (res.error == null)
-      setCategory(res.data)
-    })
-  }, [])
+    if (category.length <= 0)
+      getCategory().then((res) => {
+        if (res.error == null)
+        setCategory(res.data)
+      })
+
+    // initialize car object
+    if (category) {
+      category.forEach((item) => {
+        const categoryCar = {
+          categoryId: item.id,
+          categoryName: item.name,
+          dish: {
+            dishId: null,
+            dishName: null,
+            price: null,
+            quantity: 1,
+          }
+        }
+
+        cart.addCart(categoryCar)
+      })
+    }
+  }, [category])
 
   return (
     <div>
