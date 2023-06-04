@@ -1,6 +1,13 @@
 import { Card, CardContent } from '@mui/material';
+import { useEffect } from 'react';
+import { getDish } from '../../services/api';
 
-export default function DishCard () {
+export default function DishCard ({dish}) {
+
+  // useEffect(() => {
+  //   getDish()
+  // }, [])
+
   return (
     <>
       <Card
@@ -10,7 +17,9 @@ export default function DishCard () {
         }}
       >
         <CardContent>
-          11
+          {dish && dish.name}
+          <br />
+          {dish && dish.price}
         </CardContent>
       </Card>
     </>

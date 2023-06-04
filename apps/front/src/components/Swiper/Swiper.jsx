@@ -10,10 +10,24 @@ import "swiper/css/pagination";
 import './swiper.css'
 
 // import required modules
-import { Mousewheel, EffectCoverflow, Pagination } from "swiper";
+import { Mousewheel, EffectCoverflow } from "swiper";
 import DishCard from '../DishCard/DishCard';
+import { getDish } from '../../services/api';
 
-export default function SwiperCard() {
+export default function SwiperCard({category}) {
+  const [dishes, setDishes] = useState([]);
+
+  useEffect(() => {
+    getDish(category.id).then((res) => {
+      return res.json();
+    }).then((res) => {
+      if (res.error == null)
+        setDishes(res.data);
+    })
+  }, [category.id])
+
+
+  console.log(dishes)
   const change = (data) => {
     console.log(data.realIndex);
   };
@@ -30,17 +44,19 @@ export default function SwiperCard() {
           borderRadius: '50%',
         }}
       >
-        Main
+        {category.name}
       </h2>
-      <div style={{
-        position: 'relative',
-        marginTop: '10px',
-        height: '100%',
-      }}>
+      <div
+        style={{
+          position: 'relative',
+          marginTop: '10px',
+          height: '100%',
+        }}
+      >
         <Swiper
           onSlideChange={change}
-          effect={"coverflow"}
-          direction={"horizontal"}
+          effect={'coverflow'}
+          direction={'horizontal'}
           centeredSlides={true}
           slidesPerView={3}
           initialSlide={1}
@@ -52,15 +68,20 @@ export default function SwiperCard() {
             slideShadows: false,
           }}
           loop
+          loopedSlides={dishes.length}
           mousewheel={true}
-          pagination={{
-            clickable: true,
-          }}
-          modules={[Mousewheel, EffectCoverflow, Pagination]}
+          modules={[Mousewheel, EffectCoverflow]}
         >
-          <SwiperSlide><DishCard /></SwiperSlide>
-          <SwiperSlide><DishCard /></SwiperSlide>
-          <SwiperSlide><DishCard /></SwiperSlide>
+          {
+            dishes &&
+            dishes.map((item) => {
+              return (
+                <SwiperSlide key={item.id}>
+                  <DishCard dish={item}/>
+                </SwiperSlide>
+              )
+            })
+          }
         </Swiper>
       </div>
     </>
