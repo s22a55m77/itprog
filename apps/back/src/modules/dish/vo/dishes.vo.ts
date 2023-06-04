@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Builder } from 'builder-pattern';
 
 import type { DishEntity } from '../dish.entity';
 
@@ -12,17 +13,17 @@ export class DishesVo {
   @ApiProperty()
   price: number;
 
+  @ApiProperty()
+  image: string;
+
   public static fromEntity(dishes: DishEntity[]): DishesVo[] {
-    const dishesVoArr: DishesVo[] = [];
-
-    dishes.forEach((dish) => {
-      dishesVoArr.push({
-        id: dish.id,
-        name: dish.name,
-        price: dish.price,
-      });
+    return dishes.map((dish) => {
+      return Builder<DishesVo>()
+        .id(dish.id)
+        .name(dish.name)
+        .price(dish.price)
+        .image(dish.image)
+        .build();
     });
-
-    return dishesVoArr;
   }
 }

@@ -6,7 +6,7 @@ import { ApiResponse } from '../../decorators';
 import { CategoryService } from '../category/category.service';
 import type { DishEntity } from './dish.entity';
 import { DishService } from './dish.service';
-import { DishesVo } from './vo/Dishes.vo';
+import { DishesVo } from './vo/dishes.vo';
 
 @Controller('dish')
 @ApiTags('Dish')
