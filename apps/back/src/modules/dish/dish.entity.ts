@@ -27,6 +27,6 @@ export class DishEntity {
   @Column({ type: 'float' })
   price: number;
 
-  @Column({ type: 'blob', nullable: true })
+  @Column({ type: 'longblob', nullable: true })
   image: string;
 }
