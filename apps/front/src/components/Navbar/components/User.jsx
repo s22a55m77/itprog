@@ -24,6 +24,8 @@ export default function User () {
             setUser(res.data.username)
             setIsLogin(true)
           }
+        }).catch(() => {
+          setIsLogin(false)
         })
     }
 
