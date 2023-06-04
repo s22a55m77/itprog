@@ -17,4 +17,23 @@ export class OrderService {
       },
     });
   }
+
+  async addOrderBatch(orderEntities: OrderEntity[]): Promise<OrderEntity[]> {
+    const insertedOrderEntities: OrderEntity[] = [];
+
+    await this.orderRepository.manager.transaction(async (transactionalEntityManager) => {
+      await Promise.allSettled(
+        orderEntities.map(async (orderEntity) => {
+          const insertedOrderEntity = await transactionalEntityManager.save(
+            OrderEntity,
+            orderEntity,
+          );
+
+          insertedOrderEntities.push(insertedOrderEntity);
+        }),
+      );
+    });
+
+    return insertedOrderEntities;
+  }
 }
