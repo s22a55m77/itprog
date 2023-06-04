@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { CategoryEntity } from '../category/category.entity';
 import { ComboEntity } from '../combo/combo.entity';
@@ -9,14 +9,7 @@ export class DishEntity {
   @PrimaryGeneratedColumn('increment', { type: 'int', primaryKeyConstraintName: 'PK_dishes_id' })
   id: number;
 
-  @OneToOne(() => CategoryEntity, (categoryEntity) => categoryEntity.id, {
-    createForeignKeyConstraints: true,
-  })
-  @JoinColumn({
-    name: 'category_id',
-    referencedColumnName: 'id',
-    foreignKeyConstraintName: 'FK_dishes_categoryId_categories_id',
-  })
+  @ManyToOne(() => CategoryEntity, (categoryEntity) => categoryEntity.id)
   category: CategoryEntity;
 
   @OneToMany(() => ComboEntity, (comboEntity) => comboEntity.dish)
