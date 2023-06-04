@@ -7,8 +7,6 @@ export default function Children() {
 
   useEffect(() => {
     getCategory().then((res) => {
-      return res.json();
-    }).then((res) => {
       if (res.error == null)
       setCategory(res.data)
     })

@@ -19,15 +19,12 @@ export default function SwiperCard({category}) {
 
   useEffect(() => {
     getDish(category.id).then((res) => {
-      return res.json();
-    }).then((res) => {
       if (res.error == null)
         setDishes(res.data);
     })
   }, [category.id])
 
 
-  console.log(dishes)
   const change = (data) => {
     console.log(data.realIndex);
   };
