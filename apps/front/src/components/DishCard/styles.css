@@ -1,36 +1,60 @@
-/* Restaurant Card */
 .restaurant-card {
-  background-color: #FFF;
-  border: 1px solid #CCC;
-  border-radius: 5px;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  background-color: #ffffff;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
 }
 
-.restaurant-card img {
+.card-image {
   width: 100%;
   height: auto;
-  border-radius: 5px;
-  margin-bottom: 10px;
+  border-radius: 8px;
+  margin-bottom: 16px;
 }
 
-.restaurant-card h2 {
+.card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.dish-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.description {
+  margin-bottom: 16px;
+}
+
+.price-quantity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+span {
+  margin: 0 8px;
+}
+
+.price {
   font-size: 18px;
-  margin: 0;
-  margin-bottom: 10px;
-}
-
-.restaurant-card p {
-  margin: 5px 0;
-}
-
-.restaurant-card .price {
-  font-size: 16px;
   font-weight: bold;
 }
-
-.restaurant-card .description {
-  color: #777;
-  margin-top: 10px;
-}
-
