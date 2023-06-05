@@ -1,8 +1,7 @@
 import { Card, CardContent } from '@mui/material';
 import { useEffect } from 'react';
 import { getDish } from '../../services/api';
-import React from 'react';
-import './styles.css'; // Import the CSS file
+import './styles.css'; 
 
 export default function DishCard ({dish}) {
 
