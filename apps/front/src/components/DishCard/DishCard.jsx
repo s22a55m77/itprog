@@ -1,16 +1,21 @@
 import { Card, CardContent } from '@mui/material';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getDish } from '../../services/api';
-import './styles.css'; 
+import './styles.css';
 
 export default function DishCard ({dish}) {
-
-  // useEffect(() => {
-  //   getDish()
-  // }, [])
-
-const RestaurantCard = () => {
   const [quantity, setQuantity] = useState(1); // State variable for quantity
+  const [image, setImage] = useState();
+
+  useEffect(() => {
+    console.log(dish);
+    if (dish.image) {
+      const buffer = new Uint8Array(dish.image.data);
+      const decoder = new TextDecoder();
+      const decodedData = decoder.decode(buffer);
+      setImage(decodedData);
+    }
+  }, [dish])
 
   const increaseQuantity = () => {
     setQuantity(quantity + 1);
@@ -24,7 +29,15 @@ const RestaurantCard = () => {
 
   return (
     <div className="restaurant-card">
-      <img src="path_to_image" alt="Restaurant" className="card-image" />
+      <div
+        style={{
+          width: '100%',
+          overflow: 'hidden',
+        }}
+      >
+        {image && <img src={image} alt="Restaurant" className="card-image" /> }
+
+      </div>
       <div className="card-content">
         <h2 className="dish-name">Dish Name</h2>
         <p className="description">Description of the dish goes here.</p>
@@ -39,22 +52,22 @@ const RestaurantCard = () => {
       </div>
     </div>
   );
-};
 
-  return (
-    <>
-      <Card
-        style={{
-          width: '90%',
-          height: '90%',
-        }}
-      >
-        <CardContent>
-          {dish && dish.name}
-          <br />
-          {dish && dish.price}
-        </CardContent>
-      </Card>
-    </>
-  )
+
+  // return (
+  //   <>
+  //     <Card
+  //       style={{
+  //         width: '90%',
+  //         height: '90%',
+  //       }}
+  //     >
+  //       <CardContent>
+  //         {dish && dish.name}
+  //         <br />
+  //         {dish && dish.price}
+  //       </CardContent>
+  //     </Card>
+  //   </>
+  // )
 }
