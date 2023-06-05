@@ -1,1 +1,36 @@
+/* Restaurant Card */
+.restaurant-card {
+  background-color: #FFF;
+  border: 1px solid #CCC;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.restaurant-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.restaurant-card h2 {
+  font-size: 18px;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.restaurant-card p {
+  margin: 5px 0;
+}
+
+.restaurant-card .price {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.restaurant-card .description {
+  color: #777;
+  margin-top: 10px;
+}
 
