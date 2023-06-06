@@ -3,17 +3,20 @@
     flex-direction: column;
     height: 300px;
     width: 300px;
-    background-color: #ffffff;
+    background-color: powderblue;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 16px;
+    border:3px solid papayawhip;
+    
+
   }
 
   .card-image {
     max-width: 100%;
     height: auto;
     border-radius: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     aspect-ratio: 16/9;
   }
 
@@ -22,22 +25,31 @@
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+    margin-bottom: 10px;
   }
 
   .dish-name {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     margin-bottom: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+   
+
   }
 
   .description {
-    margin-bottom: 2px;
+    margin: auto;
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+
   }
 
   .price-quantity {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-weight: bold;
+    
   }
 
   .quantity-control {
@@ -46,12 +58,21 @@
   }
 
   .quantity-control button {
-    background-color: #ffffff;
+    background-color: white;
     border: none;
-    cursor: pointer;
-    padding: 4px;
-    font-size: 18px;
+    color: black;
+    padding: 8px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 22px;
     font-weight: bold;
+    border-radius: 5px;
+    margin-left:2px;
+    
+  }
+  .quantity-control button:hover{
+    background: lightgray;
   }
 
   .quantity-control span {
@@ -59,6 +80,17 @@
   }
 
   .price {
-    text-align: left;
+  width: 70px;
+  height: 50px;
+  border-radius: 20%;
+  background-color:white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 18px;
+  color: black ;
+  
   }
 
