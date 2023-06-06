@@ -68,7 +68,8 @@
     font-size: 22px;
     font-weight: bold;
     border-radius: 5px;
-    margin-left:2px;
+    margin-left:4px;
+    border: 2px solid grey;
     
   }
   .quantity-control button:hover{
@@ -91,6 +92,7 @@
   font-weight: bold;
   font-size: 18px;
   color: black ;
+  border: 2px solid grey;
   
   }
 
