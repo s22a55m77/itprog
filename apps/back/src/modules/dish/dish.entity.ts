@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { CategoryEntity } from '../category/category.entity';
 import { ComboEntity } from '../combo/combo.entity';
@@ -10,6 +10,11 @@ export class DishEntity {
   id: number;
 
   @ManyToOne(() => CategoryEntity, (categoryEntity) => categoryEntity.id)
+  @JoinColumn({
+    name: 'category_id',
+    referencedColumnName: 'id',
+    foreignKeyConstraintName: 'FK_dishes_categoryId_categories_id',
+  })
   category: CategoryEntity;
 
   @OneToMany(() => ComboEntity, (comboEntity) => comboEntity.dish)
@@ -23,6 +28,9 @@ export class DishEntity {
 
   @Column({ type: 'varchar' })
   name: string;
+
+  @Column({ type: 'varchar' })
+  description: string;
 
   @Column({ type: 'float' })
   price: number;
