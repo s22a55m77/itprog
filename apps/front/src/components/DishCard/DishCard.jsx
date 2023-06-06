@@ -1,6 +1,7 @@
 import { Card, CardContent } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { getDish } from '../../services/api';
+import HideImageTwoToneIcon from '@mui/icons-material/HideImageTwoTone';
 import './styles.css';
 
 export default function DishCard ({dish}) {
@@ -35,7 +36,13 @@ export default function DishCard ({dish}) {
           overflow: 'hidden',
         }}
       >
-        {image && <img src={image} alt="Restaurant" className="card-image" /> }
+        {image ? <img src={image} alt="Restaurant" className="card-image" /> :
+          <div
+            className={"card-image"}
+          >
+            <HideImageTwoToneIcon sx={{ fontSize: 80 }}/>
+          </div>
+         }
 
       </div>
       <div className="card-content">

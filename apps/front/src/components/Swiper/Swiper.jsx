@@ -55,13 +55,15 @@ export default function SwiperCard({category}) {
           marginBottom: '-50px',
         }}
       >
-        <h2
+        <h1
           style={{
             padding: '5px',
+            color: 'white',
+            fontFamily: 'Pacifico'
           }}
         >
           {category.name}
-        </h2>
+        </h1>
       </div>
       <div
         style={{

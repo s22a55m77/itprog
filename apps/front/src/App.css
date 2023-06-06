@@ -4,7 +4,11 @@
 
 .App {
   text-align: center;
-  background-color: #F8F8F8;
+  background-image: url("https://images.pexels.com/photos/326279/pexels-photo-326279.jpeg?cs=srgb&dl=pexels-pixabay-326279.jpg&fm=jpg");
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   min-height: 100vh;
   height: 100%;
 }

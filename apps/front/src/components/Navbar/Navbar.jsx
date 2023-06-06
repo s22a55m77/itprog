@@ -13,7 +13,7 @@ export default function Navbar() {
         backgroundColor: 'white',
         color: 'black',
         lineHeight: '60px',
-        boxShadow: '0px 1px 5px 0px #bdc3c7'
+        boxShadow: '0px 2px 4px 0px #00000014'
       }}
     >
       <Grid

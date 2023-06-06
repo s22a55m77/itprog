@@ -26,12 +26,18 @@ function App() {
 
 
   return (
-    <div className="App">
-      <CartContext.Provider value={{ cart, addCart }}>
-        <Navbar />
-        <Children />
-      </CartContext.Provider>
-    </div>
+    <>
+      <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Josefin Sans"/>
+      </head>
+      <div className="App">
+        <CartContext.Provider value={{ cart, addCart }}>
+          <Navbar />
+          <Children />
+        </CartContext.Provider>
+      </div>
+    </>
   );
 }
 
