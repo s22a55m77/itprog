@@ -1,33 +1,32 @@
 import { Controller, Get, HttpStatus, Param } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ResponseVo } from '../../common/vo/response.vo';
 import { ApiResponse } from '../../decorators';
 import { CategoryService } from '../category/category.service';
 import type { DishEntity } from './dish.entity';
 import { DishService } from './dish.service';
-import { DishesVo } from './vo/dishes.vo';
+import { DishVo } from './vo/dish.vo';
 
 @Controller('dish')
 @ApiTags('Dish')
 export class DishController {
   constructor(private dishService: DishService, private categoryService: CategoryService) {}
 
-  @Get('/:categoryId')
+  @Get('/:dishId')
+  @ApiOperation({
+    summary: 'Get dish by ID',
+  })
   @ApiResponse({
-    type: DishesVo,
+    type: DishVo,
     httpStatus: HttpStatus.OK,
     options: {
-      isArray: true,
+      isArray: false,
     },
   })
-  async getDishesFromCategory(
-    @Param('categoryId') categoryId: number,
-  ): Promise<ResponseVo<DishesVo[]>> {
-    await this.categoryService.getCategoryById(categoryId);
+  async getDishesFromCategory(@Param('dishId') dishId: number): Promise<ResponseVo<DishVo>> {
+    const dish: DishEntity = await this.dishService.getDishById(dishId);
 
-    const dishes: DishEntity[] = await this.dishService.getDishesFromCategory(categoryId);
-
-    return ResponseVo.Success(DishesVo.fromEntity(dishes));
+    return ResponseVo.Success(DishVo.fromEntity(dish));
   }
 }

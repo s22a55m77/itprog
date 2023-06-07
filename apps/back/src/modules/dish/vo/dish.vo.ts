@@ -3,7 +3,7 @@ import { Builder } from 'builder-pattern';
 
 import type { DishEntity } from '../dish.entity';
 
-export class DishesVo {
+export class DishVo {
   @ApiProperty()
   id: number;
 
@@ -19,15 +19,13 @@ export class DishesVo {
   @ApiProperty()
   image: string;
 
-  public static fromEntity(dishes: DishEntity[]): DishesVo[] {
-    return dishes.map((dish) => {
-      return Builder<DishesVo>()
-        .id(dish.id)
-        .name(dish.name)
-        .description(dish.description)
-        .price(dish.price)
-        .image(dish.image)
-        .build();
-    });
+  public static fromEntity(dish: DishEntity): DishVo {
+    return Builder<DishVo>()
+      .id(dish.id)
+      .name(dish.name)
+      .description(dish.description)
+      .price(dish.price)
+      .image(dish.image)
+      .build();
   }
 }

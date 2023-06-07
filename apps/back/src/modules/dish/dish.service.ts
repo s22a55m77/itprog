@@ -8,14 +8,6 @@ import { DishEntity } from './dish.entity';
 export class DishService {
   constructor(@InjectRepository(DishEntity) private dishRepository: Repository<DishEntity>) {}
 
-  getDishesFromCategory(categoryId: number): Promise<DishEntity[]> {
-    return this.dishRepository.find({
-      where: {
-        categoryId,
-      },
-    });
-  }
-
   getDishById(dishId: number): Promise<DishEntity> {
     return this.dishRepository
       .findOneOrFail({

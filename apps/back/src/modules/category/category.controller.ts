@@ -1,10 +1,12 @@
-import { Controller, Get, HttpStatus } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ResponseVo } from '../../common/vo/response.vo';
 import { ApiResponse } from '../../decorators';
+import type { DishEntity } from '../dish/dish.entity';
 import { CategoryService } from './category.service';
 import { CategoryVo } from './vo/category.vo';
+import { DishIdVo } from './vo/dish-id.vo';
 
 @ApiTags('Category')
 @Controller('category')
@@ -28,5 +30,26 @@ export class CategoryController {
     const categoryVo = CategoryVo.fromEntity(categoryEntities);
 
     return ResponseVo.Success(categoryVo);
+  }
+
+  @ApiOperation({
+    summary: 'Get Dishes from category id',
+  })
+  @ApiResponse({
+    type: DishIdVo,
+    httpStatus: HttpStatus.OK,
+    options: {
+      isArray: true,
+    },
+  })
+  @Get('/:categoryId/dishes')
+  async getCategoryDishes(
+    @Param('categoryId') categoryId: number,
+  ): Promise<ResponseVo<DishIdVo[]>> {
+    await this.categoryService.getCategoryById(categoryId);
+
+    const dishes: DishEntity[] = await this.categoryService.getDishesFromCategory(categoryId);
+
+    return ResponseVo.Success(DishIdVo.fromEntity(dishes));
   }
 }
