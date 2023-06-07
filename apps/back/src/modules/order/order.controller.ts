@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   Get,
   HttpCode,
   HttpStatus,
@@ -14,9 +15,11 @@ import { Builder } from 'builder-pattern';
 import _ from 'lodash';
 
 import { ResponseVo } from '../../common/vo/response.vo';
-import { ApiResponse } from '../../decorators';
+import { RoleType } from '../../constants';
+import { ApiResponse, Auth, AuthUser } from '../../decorators';
 import { ComboService } from '../combo/combo.service';
 import { DishService } from '../dish/dish.service';
+import { UserEntity } from '../user/user.entity';
 import { AddOrderDto } from './dto/add-order.dto';
 import { AddPaymentDto } from './dto/add-payment.dto';
 import type { OrderEntity } from './order.entity';
@@ -39,8 +42,9 @@ export class OrderController {
     type: OrderVo,
     httpStatus: HttpStatus.CREATED,
   })
+  @Auth([RoleType.USER])
   @Post()
-  async addOrder(@Body() addOrderDto: AddOrderDto) {
+  async addOrder(@AuthUser() user: UserEntity, @Body() addOrderDto: AddOrderDto) {
     const orderNumber: string = Date.now().toString();
     const dishIds: number[] = [];
 
@@ -52,7 +56,7 @@ export class OrderController {
         return Builder<OrderEntity>()
           .dishId(dish.id)
           .orderNumber(orderNumber)
-          .userId(1)
+          .userId(user.id)
           .quantity(dish.quantity)
           .build();
       }),
@@ -80,11 +84,19 @@ export class OrderController {
     httpStatus: HttpStatus.OK,
   })
   @HttpCode(HttpStatus.OK)
+  @Auth([RoleType.USER])
   @Post('/:orderNumber')
   async addPayment(
+    @AuthUser() user: UserEntity,
     @Param('orderNumber') orderNumber: string,
     @Body() addPaymentDto: AddPaymentDto,
   ): Promise<ResponseVo<OrderVo>> {
+    const orders: OrderEntity[] = await this.orderService.getOrdersByOrderNumber(orderNumber);
+
+    if (orders[0].userId !== user.id) {
+      throw new ForbiddenException('You are not the owner of this order');
+    }
+
     const price = await this.orderService.getPriceByOrder(orderNumber);
 
     if (addPaymentDto.amount < price) {
@@ -117,12 +129,10 @@ export class OrderController {
     },
   })
   @Get()
-  async getOrderByUserId(): Promise<ResponseVo<OrderVo[]>> {
-    // TODO make this endpoint authenticated
-    const userId = 1;
-
+  @Auth([RoleType.USER])
+  async getOrderByUserId(@AuthUser() user: UserEntity): Promise<ResponseVo<OrderVo[]>> {
     // the result may contains different orders
-    const orderEntities = await this.orderService.getOrdersByUserId(userId);
+    const orderEntities = await this.orderService.getOrdersByUserId(user.id);
 
     // grouped order base on the order number
     const groupedOrder = _.toArray(_.groupBy(orderEntities, 'orderNumber'));
