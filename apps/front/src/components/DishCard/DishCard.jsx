@@ -4,19 +4,26 @@ import { getDish } from '../../services/api';
 import HideImageTwoToneIcon from '@mui/icons-material/HideImageTwoTone';
 import './styles.css';
 
-export default function DishCard ({dish}) {
+export default function DishCard ({id}) {
+  const [dish, setDish] = useState();
   const [quantity, setQuantity] = useState(1); // State variable for quantity
   const [image, setImage] = useState();
 
   useEffect(() => {
-    console.log(dish);
-    if (dish.image) {
+
+    if(dish === undefined) {
+      getDish(id).then((res) => {
+        setDish(res.data);
+      })
+    }
+
+    if (dish && dish.image) {
       const buffer = new Uint8Array(dish.image.data);
       const decoder = new TextDecoder();
       const decodedData = decoder.decode(buffer);
       setImage(decodedData);
     }
-  }, [dish])
+  }, [dish, id])
 
   const increaseQuantity = () => {
     setQuantity(quantity + 1);

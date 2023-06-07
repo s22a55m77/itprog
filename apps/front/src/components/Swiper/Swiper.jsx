@@ -12,7 +12,7 @@ import './swiper.css'
 // import required modules
 import { Mousewheel, EffectCoverflow } from "swiper";
 import DishCard from '../DishCard/DishCard';
-import { getDish } from '../../services/api';
+import { getDishes } from '../../services/api';
 
 export default function SwiperCard({category}) {
   const [dishes, setDishes] = useState([]);
@@ -22,7 +22,7 @@ export default function SwiperCard({category}) {
 
   useEffect(() => {
     if(dishes.length <= 0)
-      getDish(category.id).then((res) => {
+      getDishes(category.id).then((res) => {
         if (res.error == null)
           setDishes(res.data);
       })
@@ -36,7 +36,6 @@ export default function SwiperCard({category}) {
 
 
   }, [category.id, dishes])
-
 
   const change = (data) => {
     const index = cart.cart.findIndex(x => x.categoryId === category.id);
@@ -96,7 +95,7 @@ export default function SwiperCard({category}) {
             dishes.map((item) => {
               return (
                 <SwiperSlide key={item.id}>
-                  <DishCard dish={item}/>
+                  <DishCard id={item.id}/>
                 </SwiperSlide>
               )
             })

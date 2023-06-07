@@ -9,6 +9,10 @@ export const getCategory = async () => {
   return res.json()
 }
 
+export const getDishes = async (id) => {
+  const res = await fetch(URL + `category/${id}/dishes`)
+  return res.json()
+}
 export const getDish = async (id) => {
   const res = await fetch(URL + 'dish/' + id)
   return res.json()

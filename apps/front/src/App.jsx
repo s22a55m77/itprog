@@ -27,10 +27,8 @@ function App() {
 
   return (
     <>
-      <head>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico"/>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Josefin Sans"/>
-      </head>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Pacifico"/>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Josefin Sans"/>
       <div className="App">
         <CartContext.Provider value={{ cart, addCart }}>
           <Navbar />
