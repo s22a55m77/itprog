@@ -18,6 +18,7 @@ export default function Order() {
         id={"Order Menu"}
         open={Boolean(isOpen)}
         anchorEl={isOpen}
+        disableScrollLock={true}
         PaperProps={{
           style: {
             transform: 'translateY(2px)',
