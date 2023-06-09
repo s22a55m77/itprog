@@ -1,16 +1,19 @@
-import { Card, CardContent } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Card, CardContent, TextField } from '@mui/material';
+import { useContext, useEffect, useState } from 'react';
 import { getDish } from '../../services/api';
 import HideImageTwoToneIcon from '@mui/icons-material/HideImageTwoTone';
 import './styles.css';
+import { CartContext } from '../../App';
 
-export default function DishCard ({id}) {
+export default function DishCard ({id, active, category}) {
   const [dish, setDish] = useState();
   const [quantity, setQuantity] = useState(1); // State variable for quantity
   const [image, setImage] = useState();
 
-  useEffect(() => {
+  const cart = useContext(CartContext)
 
+  useEffect(() => {
+    setQuantity(1);
     if(dish === undefined) {
       getDish(id).then((res) => {
         setDish(res.data);
@@ -23,17 +26,40 @@ export default function DishCard ({id}) {
       const decodedData = decoder.decode(buffer);
       setImage(decodedData);
     }
-  }, [dish, id])
+
+    if (active && active.id == id && dish) {
+      const index = cart.cart.findIndex(x => x.categoryId === category);
+      cart.cart[index].dish.dishId = id;
+      cart.cart[index].dish.name = dish.name;
+      cart.cart[index].dish.quantity = quantity;
+      cart.cart[index].dish.price = dish.price;
+
+    }
+  }, [dish, id, active])
+
+  const changeCartQuantity = (quantity) => {
+    const index = cart.cart.findIndex(x => x.categoryId === category);
+    cart.cart[index].dish.quantity = quantity;
+  }
 
   const increaseQuantity = () => {
+    changeCartQuantity(quantity + 1)
     setQuantity(quantity + 1);
   };
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
+      changeCartQuantity(quantity - 1)
       setQuantity(quantity - 1);
     }
   };
+
+  const change = (data) => {
+    if (data.target.value >= 1) {
+      setQuantity(data.target.value)
+      changeCartQuantity(data.target.value)
+    }
+  }
 
   return (
     <div className="restaurant-card">
@@ -53,35 +79,17 @@ export default function DishCard ({id}) {
 
       </div>
       <div className="card-content">
-        <h2 className="dish-name">Dish Name</h2>
-        <p className="description">Description of the dish goes here.</p>
+        <h2 className="dish-name">{dish && dish.name}</h2>
+        <p className="description">{dish && dish.description}</p>
         <div className="price-quantity">
           <div className="quantity-control">
             <button onClick={decreaseQuantity}>-</button>
-            <span>{quantity}</span>
+            <input onChange={change} type={"number"} min={1} className={"quantity-control-input"} value={quantity}/>
             <button onClick={increaseQuantity}>+</button>
           </div>
-          <p className="price">$10.99</p>
+          <p className="price">₱{dish && dish.price}</p>
         </div>
       </div>
     </div>
   );
-
-
-  // return (
-  //   <>
-  //     <Card
-  //       style={{
-  //         width: '90%',
-  //         height: '90%',
-  //       }}
-  //     >
-  //       <CardContent>
-  //         {dish && dish.name}
-  //         <br />
-  //         {dish && dish.price}
-  //       </CardContent>
-  //     </Card>
-  //   </>
-  // )
 }

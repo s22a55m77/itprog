@@ -22,7 +22,7 @@ export default function Children() {
           categoryName: item.name,
           dish: {
             dishId: null,
-            dishName: null,
+            name: null,
             price: null,
             quantity: 1,
           }

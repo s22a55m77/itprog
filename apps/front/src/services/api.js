@@ -39,5 +39,31 @@ export const me = async () => {
   })
 
   return res.json();
-
 }
+
+export const addOrder = async (param) => {
+  const res = await fetch(URL + 'order', {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getCookie('jwtToken')}`,
+    },
+    method: 'POST',
+    body: JSON.stringify(param)
+  })
+
+  return res.json()
+}
+
+  export const addPayment = async (order, param) => {
+  const res = await fetch(URL + `order/${order}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getCookie('jwtToken')}`,
+    },
+    method: 'POST',
+    body: JSON.stringify(param)
+  })
+
+  return res.json()
+}
+

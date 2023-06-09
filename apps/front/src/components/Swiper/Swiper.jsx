@@ -16,9 +16,7 @@ import { getDishes } from '../../services/api';
 
 export default function SwiperCard({category}) {
   const [dishes, setDishes] = useState([]);
-
-  const cart = useContext(CartContext)
-
+  const [active, setActive] = useState();
 
   useEffect(() => {
     if(dishes.length <= 0)
@@ -27,22 +25,8 @@ export default function SwiperCard({category}) {
           setDishes(res.data);
       })
 
-    if(dishes.length > 0) {
-      const index = cart.cart.findIndex(x => x.categoryId === category.id);
-      if (cart.cart[index] && dishes[1]) {
-        cart.cart[index].dish.name = dishes[1].name
-      }
-    }
-
-
+    setActive(dishes[1]);
   }, [category.id, dishes])
-
-  const change = (data) => {
-    const index = cart.cart.findIndex(x => x.categoryId === category.id);
-    if (cart.cart[index] && dishes[data.realIndex]) {
-      cart.cart[index].dish.name = dishes[data.realIndex].name
-    }
-  };
 
   return (
     <>
@@ -72,7 +56,7 @@ export default function SwiperCard({category}) {
         }}
       >
         <Swiper
-          onSlideChange={change}
+          onSlideChange={(data) => {dishes && setActive(dishes[data.realIndex])}}
           effect={'coverflow'}
           direction={'horizontal'}
           centeredSlides={true}
@@ -95,7 +79,7 @@ export default function SwiperCard({category}) {
             dishes.map((item) => {
               return (
                 <SwiperSlide key={item.id}>
-                  <DishCard id={item.id}/>
+                  <DishCard key={item.id} id={item.id} active={active} category={category.id}/>
                 </SwiperSlide>
               )
             })

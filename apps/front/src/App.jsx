@@ -15,8 +15,7 @@ function App() {
     const uniqueArr = arr.filter((arrItem, index, self) => {
       // Check if the current menu item's categoryId is unique
       return (
-        index ===
-        self.findIndex((item) => item.categoryId === arrItem.categoryId)
+        index === self.findIndex((item) => item.categoryId === arrItem.categoryId)
       );
     });
 
