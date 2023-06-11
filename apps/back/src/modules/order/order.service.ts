@@ -135,4 +135,8 @@ export class OrderService {
   async markCompleted(orderNumber: string) {
     await this.orderRepository.update({ orderNumber }, { status: OrderStatus.COMPLETED });
   }
+
+  async markCancelled(orderNumber: string) {
+    await this.orderRepository.update({ orderNumber }, { status: OrderStatus.CANCELLED });
+  }
 }

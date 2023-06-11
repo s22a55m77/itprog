@@ -119,6 +119,38 @@ export class OrderController {
   }
 
   @ApiOperation({
+    summary: 'Cancel the order',
+  })
+  @ApiResponse({
+    type: OrderVo,
+    httpStatus: HttpStatus.OK,
+  })
+  @HttpCode(HttpStatus.OK)
+  @Auth([RoleType.USER])
+  @Post('/:orderNumber/cancel')
+  async cancelOrder(@AuthUser() user: UserEntity, @Param('orderNumber') orderNumber: string) {
+    const orders: OrderEntity[] = await this.orderService.getOrdersByOrderNumber(orderNumber);
+
+    if (orders[0].userId !== user.id) {
+      throw new ForbiddenException('You are not the owner of this order');
+    }
+
+    try {
+      await this.orderService.markCancelled(orderNumber);
+    } catch {
+      throw new InternalServerErrorException('Unknown Error, please contact the admin');
+    }
+
+    const orderEntities = await this.orderService.getOrdersByOrderNumber(orderNumber);
+
+    const orderVo = OrderVo.fromEntity(orderEntities);
+
+    orderVo.price = await this.orderService.getPriceByOrder(orderNumber);
+
+    return ResponseVo.Success(orderVo);
+  }
+
+  @ApiOperation({
     summary: 'Get All Orders of User',
   })
   @ApiResponse({
