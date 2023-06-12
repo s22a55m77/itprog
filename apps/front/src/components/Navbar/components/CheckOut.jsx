@@ -22,6 +22,20 @@ export default function CheckOut() {
 
   const cart = useContext(CartContext);
 
+  useEffect(() => {
+    if(getCookie('jwtToken') === "")
+      setIsLogin(false)
+    else {
+      me().then((res) => {
+        if (res.error === null) {
+          setIsLogin(true)
+        }
+      }).catch(() => {
+        setIsLogin(false)
+      })
+    }
+  }, [])
+
   const handleClick = () => {
     if (activeStep === 0) {
       setIsLoading(true)
@@ -77,18 +91,6 @@ export default function CheckOut() {
 
   const handleOnClickModal = () => {
     setIsOpen(true)
-    if(getCookie('jwtToken') === "")
-      setIsLogin(false)
-    else {
-      me().then((res) => {
-        if (res.error === null) {
-          setIsLogin(true)
-        }
-      }).catch(() => {
-        setIsLogin(false)
-      })
-    }
-
   }
 
   return (
