@@ -54,6 +54,18 @@ export const addOrder = async (param) => {
   return res.json()
 }
 
+export const cancelOrder = async (param) => {
+  const res = await fetch(URL + `order/${param}/cancel`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getCookie('jwtToken')}`,
+    },
+    method: 'POST',
+  })
+
+  return res.json()
+}
+
   export const addPayment = async (order, param) => {
   const res = await fetch(URL + `order/${order}`, {
     headers: {

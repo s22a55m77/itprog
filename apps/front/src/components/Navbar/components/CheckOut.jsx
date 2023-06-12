@@ -6,9 +6,10 @@ import SyncTwoToneIcon from '@mui/icons-material/SyncTwoTone';
 import CheckCircleTwoToneIcon from '@mui/icons-material/CheckCircleTwoTone';
 import ErrorTwoToneIcon from '@mui/icons-material/ErrorTwoTone';
 import './CheckOut.css'
-import { addOrder, addPayment, me } from '../../../services/api';
+import { addOrder, addPayment, cancelOrder, me } from '../../../services/api';
 import Alert from '@mui/material/Alert';
 import { getCookie } from '../../../utils';
+import { LoadingButton } from '@mui/lab';
 
 export default function CheckOut() {
   const [isOpen, setIsOpen] = useState(false);
@@ -91,6 +92,18 @@ export default function CheckOut() {
 
   const handleOnClickModal = () => {
     setIsOpen(true)
+  }
+
+  const handleCancel = () => {
+    setIsLoading(true)
+    cancelOrder(pendingPayment.orderNumber).then((res) => {
+      if (error == null)
+        alert('Canceled!')
+    }).catch((err) => {
+      alert('Error!')
+    }).finally(() => {
+      setIsLoading(false)
+    })
   }
 
   return (
@@ -243,6 +256,12 @@ export default function CheckOut() {
                 right: '20px'
               }}
             >
+              {
+                activeStep === 1 &&
+                <LoadingButton loading={isLoading} color={'error'} onClick={handleCancel}>
+                  Cancel Order
+                </LoadingButton>
+              }
               {
                 activeStep !== 0 &&
                 <Button onClick={() => setActiveStep(activeStep - 1)}>
