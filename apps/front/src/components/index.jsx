@@ -12,6 +12,8 @@ export default function Children() {
       getCategory().then((res) => {
         if (res.error == null)
         setCategory(res.data)
+      }).catch(() => {
+
       })
 
     // initialize car object
@@ -36,12 +38,13 @@ export default function Children() {
   return (
     <div>
       {
-        category &&
+        !category ?
         category.map((item) => {
           return (
             <SwiperCard key={item.id} category={item}/>
           )
-        })
+        }) :
+          <h2 style={{color: 'white'}}>Network Error</h2>
       }
 
     </div>
