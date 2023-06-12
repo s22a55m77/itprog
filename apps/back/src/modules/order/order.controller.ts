@@ -25,6 +25,7 @@ import { AddPaymentDto } from './dto/add-payment.dto';
 import type { OrderEntity } from './order.entity';
 import { OrderService } from './order.service';
 import { OrderVo } from './vo/order.vo';
+import { PriceVo } from './vo/price.vo';
 
 @Controller('order')
 @ApiTags('Order')
@@ -116,6 +117,31 @@ export class OrderController {
     orderVo.price = await this.orderService.getPriceByOrder(orderNumber);
 
     return ResponseVo.Success(orderVo);
+  }
+
+  @Get('/:orderNumber/price')
+  @ApiOperation({
+    summary: 'Get the price',
+  })
+  @ApiResponse({
+    type: PriceVo,
+    httpStatus: HttpStatus.OK,
+  })
+  @HttpCode(HttpStatus.OK)
+  @Auth([RoleType.USER])
+  async getOrderPrice(
+    @AuthUser() user: UserEntity,
+    @Param('orderNumber') orderNumber: string,
+  ): Promise<ResponseVo<PriceVo>> {
+    const orders: OrderEntity[] = await this.orderService.getOrdersByOrderNumber(orderNumber);
+
+    if (orders[0].userId !== user.id) {
+      throw new ForbiddenException('You are not the owner of this order');
+    }
+
+    const price = await this.orderService.getPriceByOrder(orderNumber);
+
+    return ResponseVo.Success(PriceVo.fromNumber(price));
   }
 
   @ApiOperation({
