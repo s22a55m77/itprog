@@ -38,7 +38,7 @@ export default function Children() {
   return (
     <div>
       {
-        !category ?
+        category ?
         category.map((item) => {
           return (
             <SwiperCard key={item.id} category={item}/>
