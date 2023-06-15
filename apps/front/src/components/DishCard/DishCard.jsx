@@ -6,7 +6,7 @@ import './styles.css';
 import { CartContext } from '../../App';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-import { useMount, useWhyDidYouUpdate } from 'ahooks';
+import { useMount } from 'ahooks';
 
 export default function DishCard ({id, active, category}) {
   const [dish, setDish] = useState();
@@ -15,12 +15,11 @@ export default function DishCard ({id, active, category}) {
 
   const cart = useContext(CartContext)
 
-  useWhyDidYouUpdate('Dishcard', {dish, quantity, image, id, active, category})
 
   useMount(() => {
     setQuantity(1);
 
-    getDish(id).then((res) => {
+    getDish(id, true).then((res) => {
       setDish(res.data);
     })
 

@@ -13,8 +13,8 @@ export const getDishes = async (id) => {
   const res = await fetch(URL + `category/${id}/dishes`)
   return res.json()
 }
-export const getDish = async (id) => {
-  const res = await fetch(URL + 'dish/' + id)
+export const getDish = async (id, isImage) => {
+  const res = await fetch(URL + `dish/${id}${isImage ? '?image=true' : ''}`, {cache: 'force-cache'})
   return res.json()
 }
 
@@ -87,6 +87,17 @@ export const cancelOrder = async (param) => {
   })
 
   return res.json()
+}
+
+export const getOrder = async () => {
+  const res = await fetch(URL + 'order', {
+    headers: {
+      Authorization: `Bearer ${getCookie('jwtToken')}`,
+    },
+    method: 'GET',
+  })
+
+  return res.json();
 }
 
   export const addPayment = async (order, param) => {
