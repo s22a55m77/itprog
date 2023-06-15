@@ -39,7 +39,7 @@ export default function SwiperCard({category}) {
         }}
       >
         <a 
-          href=`#${category.name || ' '}`
+          href={`#${category.name || ' '}`}
           style={{
             textDecoration: 'none',
             cursor: 'pointer',
