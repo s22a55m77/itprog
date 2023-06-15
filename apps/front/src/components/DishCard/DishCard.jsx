@@ -6,6 +6,7 @@ import './styles.css';
 import { CartContext } from '../../App';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import { useMount, useWhyDidYouUpdate } from 'ahooks';
 
 export default function DishCard ({id, active, category}) {
   const [dish, setDish] = useState();
@@ -14,14 +15,18 @@ export default function DishCard ({id, active, category}) {
 
   const cart = useContext(CartContext)
 
-  useEffect(() => {
-    setQuantity(1);
-    if(dish === undefined) {
-      getDish(id).then((res) => {
-        setDish(res.data);
-      })
-    }
+  useWhyDidYouUpdate('Dishcard', {dish, quantity, image, id, active, category})
 
+  useMount(() => {
+    setQuantity(1);
+
+    getDish(id).then((res) => {
+      setDish(res.data);
+    })
+
+  })
+
+  useEffect(() => {
     if (dish && dish.image) {
       const buffer = new Uint8Array(dish.image.data);
       const decoder = new TextDecoder();
@@ -37,7 +42,7 @@ export default function DishCard ({id, active, category}) {
       cart.cart[index].dish.price = dish.price;
 
     }
-  }, [dish, id, active])
+  }, [active])
 
   const changeCartQuantity = (quantity) => {
     const index = cart.cart.findIndex(x => x.categoryId === category);
