@@ -13,7 +13,7 @@ export default function Order() {
         style={{ padding: '3px 16px 3px 16px' }}
         onClick={(e) => setIsOpen(e.currentTarget)}
       >
-        <HistoryTwoToneIcon style={{marginRight: '5px'}}/> Order
+        <HistoryTwoToneIcon style={{marginRight: '5px'}}/> Orders
       </Button>
       <Menu
         id={"Order Menu"}
