@@ -19,14 +19,15 @@ export default function Navbar() {
       <Grid
         container
       >
-        <Grid item lg={1} xs={0} sm={1}>
+        <Grid item lg={1} xs={0} sm={1}/>
+        <Grid item lg={1} xs={1} sm={2}>
           <Order />
         </Grid>
-        <Grid item lg={2} md={2} xs={3} sm={3} >
+        <Grid item lg={2} md={3} xs={8} sm={2} >
           <CheckOut />
         </Grid>
-        <Grid item lg={8} md={8} sm={6} xs={3} />
-        <Grid item xs={1} >
+        <Grid item lg={7} md={6} sm={3} xs={1} />
+        <Grid item xs={1} sm={1}>
           <User />
         </Grid>
       </Grid>
