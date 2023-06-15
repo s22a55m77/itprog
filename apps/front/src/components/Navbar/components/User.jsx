@@ -44,6 +44,10 @@ export default function User () {
               }
               else
                 alert("Login Error! Error at Registration")
+              if(regRes.error == null )
+                handleSubmit();
+              else
+                alert("Login Error! Error at Registration");
             })
           } else {
             console.log(res.data.token.accessToken)
