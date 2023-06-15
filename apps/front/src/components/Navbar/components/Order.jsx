@@ -1,5 +1,6 @@
 import { Button, Menu, MenuItem } from '@mui/material';
 import { useState } from 'react';
+import HistoryTwoToneIcon from '@mui/icons-material/HistoryTwoTone';
 
 export default function Order() {
   const [isOpen, setIsOpen] = useState(null);
@@ -12,7 +13,7 @@ export default function Order() {
         style={{ padding: '3px 16px 3px 16px' }}
         onClick={(e) => setIsOpen(e.currentTarget)}
       >
-        Order
+        <HistoryTwoToneIcon style={{marginRight: '5px'}}/> Orders
       </Button>
       <Menu
         id={"Order Menu"}

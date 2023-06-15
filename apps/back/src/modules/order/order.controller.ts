@@ -18,7 +18,6 @@ import { ResponseVo } from '../../common/vo/response.vo';
 import { RoleType } from '../../constants';
 import { ApiResponse, Auth, AuthUser } from '../../decorators';
 import { ComboService } from '../combo/combo.service';
-import { DishService } from '../dish/dish.service';
 import { UserEntity } from '../user/user.entity';
 import { AddOrderDto } from './dto/add-order.dto';
 import { AddPaymentDto } from './dto/add-payment.dto';
@@ -29,11 +28,7 @@ import { OrderVo } from './vo/order.vo';
 @Controller('order')
 @ApiTags('Order')
 export class OrderController {
-  constructor(
-    private orderService: OrderService,
-    private comboService: ComboService,
-    private dishService: DishService,
-  ) {}
+  constructor(private orderService: OrderService, private comboService: ComboService) {}
 
   @ApiOperation({
     summary: 'add order',
@@ -114,6 +109,42 @@ export class OrderController {
     const orderVo = OrderVo.fromEntity(orderEntities);
 
     orderVo.price = await this.orderService.getPriceByOrder(orderNumber);
+
+    return ResponseVo.Success(orderVo);
+  }
+
+  @Get('/:orderNumber')
+  @ApiOperation({
+    summary: 'Get the order detail',
+  })
+  @ApiResponse({
+    type: OrderVo,
+    httpStatus: HttpStatus.OK,
+  })
+  @HttpCode(HttpStatus.OK)
+  @Auth([RoleType.USER])
+  async getOrderPrice(
+    @AuthUser() user: UserEntity,
+    @Param('orderNumber') orderNumber: string,
+  ): Promise<ResponseVo<OrderVo>> {
+    const orders: OrderEntity[] = await this.orderService.getOrdersByOrderNumber(orderNumber);
+
+    if (orders[0].userId !== user.id) {
+      throw new ForbiddenException('You are not the owner of this order');
+    }
+
+    const orderEntities = await this.orderService.getOrdersByOrderNumber(orderNumber);
+
+    const orderVo = OrderVo.fromEntity(orderEntities);
+
+    const price = await this.orderService.getPriceByOrder(orderNumber);
+    orderVo.price = price;
+
+    const combo = await this.comboService.getComboByDishes(
+      orderVo.details.map((obj) => obj.dishId),
+    );
+
+    orderVo.combo = combo?.name;
 
     return ResponseVo.Success(orderVo);
   }

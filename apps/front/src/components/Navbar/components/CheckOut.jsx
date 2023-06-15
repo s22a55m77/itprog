@@ -10,6 +10,7 @@ import { addOrder, addPayment, cancelOrder, me } from '../../../services/api';
 import Alert from '@mui/material/Alert';
 import { getCookie } from '../../../utils';
 import { LoadingButton } from '@mui/lab';
+import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone';
 
 export default function CheckOut() {
   const [isOpen, setIsOpen] = useState(false);
@@ -114,7 +115,7 @@ export default function CheckOut() {
         style={{ padding: '3px 16px 3px 16px', whiteSpace: 'nowrap'}}
         onClick={() => { handleOnClickModal()}}
       >
-        Check Out
+        <ShoppingCartTwoToneIcon style={{marginRight: '5px'}} /> Check Out
       </Button>
       {
         isLogin ?
