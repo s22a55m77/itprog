@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getCookie, setCookie } from '../../../utils';
 import { Alert, Button, TextField } from '@mui/material';
 import Modal from '@mui/material/Modal';
-import { login, me } from '../../../services/api';
+import { login, me, register } from '../../../services/api';
 import { LoadingButton } from '@mui/lab';
 
 
@@ -38,11 +38,18 @@ export default function User () {
       login({ username: username.toString(), password: password.toString() })
         .then((res) => {
           if (res.error) {
-            setIsAlert(res.msg);
+            register({ username: username.toString(), password: password.toString() }).then((regRes) => {
+              if(regRes.error == null) {
+                handleSubmit(e);
+              }
+              else
+                alert("Login Error! Error at Registration")
+            })
           } else {
             console.log(res.data.token.accessToken)
             setCookie('jwtToken', res.data.token.accessToken)
             setIsOpen(false)
+            alert("Login Success! Please Refresh")
           }
         })
         .finally(() => {
