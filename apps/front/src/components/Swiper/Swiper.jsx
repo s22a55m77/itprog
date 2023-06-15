@@ -38,15 +38,25 @@ export default function SwiperCard({category}) {
           marginBottom: '-50px',
         }}
       >
-        <h1
+        <a 
+          href=`#${category.name}`
           style={{
-            padding: '5px',
-            color: 'white',
-            fontFamily: 'Pacifico'
+            textDecoration: 'none',
+            cursor: 'pointer',
+            color: 'inherit',
           }}
         >
-          {category.name}
-        </h1>
+          <h1
+            id={category.name}
+            style={{
+              padding: '5px',
+              color: 'white',
+              fontFamily: 'Pacifico'
+            }}
+          >
+            {category.name}
+          </h1>
+        </a >
       </div>
       <div
         style={{
