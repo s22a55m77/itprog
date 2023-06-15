@@ -4,6 +4,8 @@ import { getDish } from '../../services/api';
 import HideImageTwoToneIcon from '@mui/icons-material/HideImageTwoTone';
 import './styles.css';
 import { CartContext } from '../../App';
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function DishCard ({id, active, category}) {
   const [dish, setDish] = useState();
@@ -83,9 +85,9 @@ export default function DishCard ({id, active, category}) {
         <p className="description">{dish && dish.description}</p>
         <div className="price-quantity">
           <div className="quantity-control">
-            <button onClick={decreaseQuantity}>-</button>
+            <button onClick={decreaseQuantity}><RemoveIcon /></button>
             <input onChange={change} type={"number"} min={1} className={"quantity-control-input"} value={quantity}/>
-            <button onClick={increaseQuantity}>+</button>
+            <button onClick={increaseQuantity}><AddIcon /></button>
           </div>
           <p className="price">₱{dish && dish.price}</p>
         </div>
