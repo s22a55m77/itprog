@@ -38,7 +38,7 @@ export default function SwiperCard({category}) {
           marginBottom: '-50px',
         }}
       >
-        <a 
+        <a
           href={`#${category.name || ' '}`}
           style={{
             textDecoration: 'none',
