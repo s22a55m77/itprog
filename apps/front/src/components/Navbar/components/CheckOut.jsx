@@ -5,7 +5,7 @@ import { CartContext } from '../../../App';
 import SyncTwoToneIcon from '@mui/icons-material/SyncTwoTone';
 import CheckCircleTwoToneIcon from '@mui/icons-material/CheckCircleTwoTone';
 import ErrorTwoToneIcon from '@mui/icons-material/ErrorTwoTone';
-import './CheckOut.css'
+import './Style.css'
 import { addOrder, addPayment, cancelOrder, me } from '../../../services/api';
 import Alert from '@mui/material/Alert';
 import { getCookie } from '../../../utils';
@@ -80,7 +80,6 @@ export default function CheckOut() {
         })
       }
     }
-
   }
   const handleClose = (event, reason) => {
     if (activeStep === 2 && isLoading) {
