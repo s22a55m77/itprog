@@ -18,23 +18,17 @@ import { ResponseVo } from '../../common/vo/response.vo';
 import { RoleType } from '../../constants';
 import { ApiResponse, Auth, AuthUser } from '../../decorators';
 import { ComboService } from '../combo/combo.service';
-import { DishService } from '../dish/dish.service';
 import { UserEntity } from '../user/user.entity';
 import { AddOrderDto } from './dto/add-order.dto';
 import { AddPaymentDto } from './dto/add-payment.dto';
 import type { OrderEntity } from './order.entity';
 import { OrderService } from './order.service';
 import { OrderVo } from './vo/order.vo';
-import { PriceVo } from './vo/price.vo';
 
 @Controller('order')
 @ApiTags('Order')
 export class OrderController {
-  constructor(
-    private orderService: OrderService,
-    private comboService: ComboService,
-    private dishService: DishService,
-  ) {}
+  constructor(private orderService: OrderService, private comboService: ComboService) {}
 
   @ApiOperation({
     summary: 'add order',
@@ -119,12 +113,12 @@ export class OrderController {
     return ResponseVo.Success(orderVo);
   }
 
-  @Get('/:orderNumber/price')
+  @Get('/:orderNumber')
   @ApiOperation({
-    summary: 'Get the price',
+    summary: 'Get the order detail',
   })
   @ApiResponse({
-    type: PriceVo,
+    type: OrderVo,
     httpStatus: HttpStatus.OK,
   })
   @HttpCode(HttpStatus.OK)
@@ -132,16 +126,27 @@ export class OrderController {
   async getOrderPrice(
     @AuthUser() user: UserEntity,
     @Param('orderNumber') orderNumber: string,
-  ): Promise<ResponseVo<PriceVo>> {
+  ): Promise<ResponseVo<OrderVo>> {
     const orders: OrderEntity[] = await this.orderService.getOrdersByOrderNumber(orderNumber);
 
     if (orders[0].userId !== user.id) {
       throw new ForbiddenException('You are not the owner of this order');
     }
 
-    const price = await this.orderService.getPriceByOrder(orderNumber);
+    const orderEntities = await this.orderService.getOrdersByOrderNumber(orderNumber);
 
-    return ResponseVo.Success(PriceVo.fromNumber(price));
+    const orderVo = OrderVo.fromEntity(orderEntities);
+
+    const price = await this.orderService.getPriceByOrder(orderNumber);
+    orderVo.price = price;
+
+    const combo = await this.comboService.getComboByDishes(
+      orderVo.details.map((obj) => obj.dishId),
+    );
+
+    orderVo.combo = combo?.name;
+
+    return ResponseVo.Success(orderVo);
   }
 
   @ApiOperation({
