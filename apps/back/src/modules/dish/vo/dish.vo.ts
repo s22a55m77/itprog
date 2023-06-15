@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 
 import type { DishEntity } from '../dish.entity';
@@ -16,16 +16,20 @@ export class DishVo {
   @ApiProperty()
   price: number;
 
-  @ApiProperty()
-  image: string;
+  @ApiPropertyOptional()
+  image?: string;
 
-  public static fromEntity(dish: DishEntity): DishVo {
-    return Builder<DishVo>()
+  public static fromEntity(dish: DishEntity, image: boolean): DishVo {
+    const builder = Builder<DishVo>()
       .id(dish.id)
       .name(dish.name)
       .description(dish.description)
-      .price(dish.price)
-      .image(dish.image)
-      .build();
+      .price(dish.price);
+
+    if (image) {
+      builder.image(dish.image);
+    }
+
+    return builder.build();
   }
 }
