@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Param } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ResponseVo } from '../../common/vo/response.vo';
@@ -24,9 +24,12 @@ export class DishController {
       isArray: false,
     },
   })
-  async getDishesFromCategory(@Param('dishId') dishId: number): Promise<ResponseVo<DishVo>> {
+  async getDishesFromCategory(
+    @Param('dishId') dishId: number,
+    @Query('image') image: boolean,
+  ): Promise<ResponseVo<DishVo>> {
     const dish: DishEntity = await this.dishService.getDishById(dishId);
 
-    return ResponseVo.Success(DishVo.fromEntity(dish));
+    return ResponseVo.Success(DishVo.fromEntity(dish, image));
   }
 }
