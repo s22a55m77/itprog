@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Param, Query } from '@nestjs/common';
+import { Controller, Get, Header, HttpStatus, Param, Query, StreamableFile } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ResponseVo } from '../../common/vo/response.vo';
@@ -31,5 +31,20 @@ export class DishController {
     const dish: DishEntity = await this.dishService.getDishById(dishId);
 
     return ResponseVo.Success(DishVo.fromEntity(dish, image));
+  }
+
+  @Get('/:dishId/image')
+  @Header('Content-Type', 'image/jpeg')
+  @ApiOperation({
+    summary: 'Get dish image by ID',
+  })
+  async getDishImageById(@Param('dishId') dishId: number): Promise<StreamableFile> {
+    const dish: DishEntity = await this.dishService.getDishById(dishId);
+
+    const data = dish.image.toString().replace(/^data:image\/(png|jpeg|jpg|webp);base64,/, '');
+
+    const imageBuffer = Buffer.from(data, 'base64');
+
+    return new StreamableFile(imageBuffer);
   }
 }
