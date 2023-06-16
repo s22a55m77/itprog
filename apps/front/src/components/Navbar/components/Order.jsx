@@ -136,9 +136,7 @@ export default function Order() {
       }, 10);
     }
   };
-
-  console.log('order: ', orderDetail);
-
+  
   return (
     <>
       <Button
