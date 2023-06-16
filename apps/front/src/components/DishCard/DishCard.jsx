@@ -12,7 +12,7 @@ import { URL } from '../../services/api';
 export default function DishCard({ id, active, category }) {
   const [dish, setDish] = useState();
   const [quantity, setQuantity] = useState(1); // State variable for quantity
-  const [image, setImage] = useState();
+  const [image, setImage] = useState(true);
 
   const cart = useContext(CartContext);
 
@@ -67,7 +67,12 @@ export default function DishCard({ id, active, category }) {
         }}
       >
         {image ? (
-          <img src={`${URL}dish/${id}/image`} alt="Restaurant" className="card-image" />
+          <img
+            src={`${URL}dish/${id}/image`}
+            alt="Restaurant"
+            className="card-image"
+            onError={() => setImage(false)}
+          />
         ) : (
           <div className={'card-image'}>
             <HideImageTwoToneIcon sx={{ fontSize: 80 }} />
