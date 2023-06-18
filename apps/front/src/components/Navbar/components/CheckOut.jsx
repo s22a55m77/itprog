@@ -111,7 +111,7 @@ export default function CheckOut() {
       <Button
         variant="contained"
         color="primary"
-        style={{ padding: '3px 16px 3px 16px', whiteSpace: 'nowrap'}}
+        style={{ padding: '3px 16px 3px 16px', whiteSpace: 'nowrap', marginLeft: '10px',}}
         onClick={() => { handleOnClickModal()}}
       >
         <ShoppingCartTwoToneIcon style={{marginRight: '5px'}} /> Check Out

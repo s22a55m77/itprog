@@ -142,7 +142,7 @@ export default function Order() {
       <Button
         variant="contained"
         color="primary"
-        style={{ padding: '3px 16px 3px 16px' }}
+        style={{ padding: '3px 16px 3px 16px', marginLeft:'20px', }}
         onMouseEnter={handleEnter}
       >
         <HistoryTwoToneIcon style={{ marginRight: '5px' }} /> Orders

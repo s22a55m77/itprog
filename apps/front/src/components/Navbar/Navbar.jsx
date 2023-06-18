@@ -16,21 +16,20 @@ export default function Navbar() {
         boxShadow: '0px 2px 4px 0px #00000014'
       }}
     >
-      <Grid
-        container
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
       >
-        <Grid item lg={1} xs={0} sm={1}/>
-        <Grid item lg={1} xs={1} sm={2}>
+        <div>
           <Order />
-        </Grid>
-        <Grid item lg={2} md={3} xs={8} sm={2} >
           <CheckOut />
-        </Grid>
-        <Grid item lg={7} md={6} sm={3} xs={1} />
-        <Grid item xs={1} sm={1}>
+        </div>
+        <div>
           <User />
-        </Grid>
-      </Grid>
+        </div>
+      </div>
     </div>
   )
 }
