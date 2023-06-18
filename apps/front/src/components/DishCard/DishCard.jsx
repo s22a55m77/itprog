@@ -26,7 +26,6 @@ export default function DishCard({ id, active, category }) {
 
   useEffect(() => {
     if (active && active.id == id && dish) {
-      console.log('11: ', active)
       const index = cart.cart.findIndex((x) => x.categoryId === category);
       cart.cart[index].dish.dishId = id;
       cart.cart[index].dish.name = dish.name;
