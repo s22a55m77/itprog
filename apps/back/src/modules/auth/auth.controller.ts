@@ -1,4 +1,13 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Version } from '@nestjs/common';
+import {
+  Body,
+  ConflictException,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Version,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 
@@ -42,6 +51,12 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ type: UserVo, description: 'Successfully Registered', httpStatus: HttpStatus.OK })
   async userRegister(@Body() userRegisterDto: UserRegisterDto): Promise<ResponseVo<UserVo>> {
+    const user = await this.userService.findOne({ username: userRegisterDto.username });
+
+    if (user) {
+      throw new ConflictException('User already exists');
+    }
+
     const createdUser = await this.userService.createUser(userRegisterDto);
 
     return ResponseVo.Success<UserVo>(UserVo.fromEntity(createdUser));
