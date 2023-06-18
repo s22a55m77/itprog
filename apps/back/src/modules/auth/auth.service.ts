@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { validateHash } from '../../common/utils';
@@ -34,12 +34,16 @@ export class AuthService {
       username: userLoginDto.username,
     });
 
-    const isPasswordValid = await validateHash(userLoginDto.password, user?.password);
-
-    if (!isPasswordValid) {
+    if (!user) {
       throw new NotFoundException('No such user');
     }
 
-    return user!;
+    const isPasswordValid = await validateHash(userLoginDto.password, user.password);
+
+    if (!isPasswordValid) {
+      throw new BadRequestException('Password invalid');
+    }
+
+    return user;
   }
 }
