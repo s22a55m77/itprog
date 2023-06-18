@@ -32,25 +32,29 @@ export default function User () {
   }, [])
 
   const handleSubmit = (e) => {
-    setIsLoading(true);
     e.preventDefault()
+    if (password.toString().length < 6) {
+      alert("Password Minlength is 6!");
+      return;
+    }
+    setIsLoading(true);
     setTimeout(() => {
       login({ username: username.toString(), password: password.toString() })
         .then((res) => {
-          if (res.error) {
+          console.log(res)
+          if (res.msg === 'No such user') {
             register({ username: username.toString(), password: password.toString() }).then((regRes) => {
               if(regRes.error == null) {
                 handleSubmit(e);
               }
               else
-                alert("Login Error! Error at Registration")
-              if(regRes.error == null )
-                handleSubmit();
-              else
-                alert("Login Error! Error at Registration");
+                alert(`Registration Error! ${regRes.msg}`)
             })
-          } else {
-            console.log(res.data.token.accessToken)
+          }
+          else if (res.msg === 'Password invalid') {
+            alert('Password Invalid!')
+          }
+          else {
             setCookie('jwtToken', res.data.token.accessToken)
             setIsOpen(false)
             alert("Login Success! Please Refresh")
@@ -66,7 +70,7 @@ export default function User () {
     <>
       {
         isLogin ?
-          <div>{user && user}</div> :
+          <div style={{marginRight: '10px'}}>{user && user}</div> :
           <div>
             <Button style={{whiteSpace: 'nowrap'}} onClick={() => setIsOpen(true)}>
               Sign In
