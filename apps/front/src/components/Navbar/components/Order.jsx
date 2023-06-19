@@ -117,11 +117,13 @@ export default function Order() {
       });
   };
 
-  const handleOrderClick = (orderNumber) => {
-    console.log('11');
-    setModalOpen(true);
-    setIsOpen(false);
-    if (activeStep === 0) {
+  const handleOrderClick = (orderNumber, status) => {
+    if (status === 'COMPLETED') {
+      return;
+    }
+    else if (activeStep === 0) {
+      setModalOpen(true);
+      setIsOpen(false);
       setIsLoading(true);
       setTimeout(() => {
         getOrderDetail(orderNumber)
@@ -165,7 +167,7 @@ export default function Order() {
           order &&
           order.map((item) => {
             return (
-              <div key={item.orderNumber} onClick={() => handleOrderClick(item.orderNumber)}>
+              <div key={item.orderNumber} onClick={() => handleOrderClick(item.orderNumber, item.status)}>
                 <MenuItem>
                   <div>
                     {item.orderNumber}
