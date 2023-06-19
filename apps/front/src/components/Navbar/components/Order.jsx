@@ -217,8 +217,8 @@ export default function Order() {
                 ? '600px'
                 : '400px'
               : activeStep === 0
-              ? '550px'
-              : '350px',
+              ? '500px'
+              : '400px',
             position: 'absolute',
             top: '50%',
             transform: 'translate(0, -50%)',
