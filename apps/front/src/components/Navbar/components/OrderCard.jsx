@@ -8,9 +8,7 @@ export default function OrderCard(id) {
   useEffect(() => {
     getDish(id.id, false).then((res) => {
       if(!res.error) {
-        console.log(res)
         setDish(res.data)
-        console.log('122')
       }
     })
   }, [id])
