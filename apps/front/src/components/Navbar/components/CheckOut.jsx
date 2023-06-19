@@ -281,7 +281,7 @@ export default function CheckOut() {
                 </LoadingButton>
               }
               {
-                activeStep !== 0 &&
+                activeStep !== 0 && activeStep !== 2 &&
                 <Button onClick={() => setActiveStep(activeStep - 1)}>
                   Back
                 </Button>

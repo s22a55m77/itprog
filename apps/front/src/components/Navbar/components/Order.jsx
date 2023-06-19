@@ -366,7 +366,7 @@ export default function Order() {
                 Cancel Order
               </LoadingButton>
             )}
-            {activeStep !== 0 && (
+            {activeStep !== 0 && activeStep !== 2 && (
               <Button onClick={() => setActiveStep(activeStep - 1)}>Back</Button>
             )}
             {activeStep !== 2 && (
