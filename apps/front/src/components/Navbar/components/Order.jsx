@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 import {
   addOrder,
   addPayment,
-  cancelOrder,
+  cancelOrder, getDish,
   getOrder,
   getOrderDetail,
   me,
@@ -39,6 +39,7 @@ export default function Order() {
   const [error, setError] = useState();
   const [isValid, setIsValid] = useState(true);
   const [userPayment, setUserPayment] = useState(0);
+  const [totalPayment, setTotalPayment] = useState(0);
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
@@ -75,6 +76,7 @@ export default function Order() {
     if (activeStep === 2 && isLoading) {
       setModalOpen(true);
     } else {
+      setActiveStep(0)
       setModalOpen(false);
     }
   };
@@ -88,7 +90,6 @@ export default function Order() {
       } else {
         setActiveStep(2);
         setIsLoading(true);
-        console.log(userPayment);
         addPayment(orderDetail.orderNumber, { amount: parseInt(userPayment) })
           .then((res) => {
             setIsLoading(false);
@@ -118,7 +119,7 @@ export default function Order() {
   };
 
   const handleOrderClick = (orderNumber, status) => {
-    if (status === 'COMPLETED') {
+    if (status === 'COMPLETED' || status === 'CANCELLED') {
       return;
     }
     else if (activeStep === 0) {
@@ -130,6 +131,15 @@ export default function Order() {
           .then((res) => {
             if (!res.error) {
               setOrderDetail(res.data);
+              let sum = totalPayment;
+              res.data.details.map((item, index) => {
+                getDish(item.dishId, false).then((dishRes) => {
+                  if (!res.error) {
+                    sum += res.data.details[index].quantity * dishRes.data.price
+                  }
+                  setTotalPayment(totalPayment + sum);
+                })
+              })
             }
           })
           .finally(() => {
@@ -295,8 +305,11 @@ export default function Order() {
                   <Card>
                     <CardContent>Combo: {orderDetail?.combo ?? 'None'}</CardContent>
                   </Card>
+                  <Card>
+                    <CardContent>Total Payment: { totalPayment }</CardContent>
+                  </Card>
                   <Card style={{ marginTop: '5px' }}>
-                    <CardContent>Total Payment: ₱{orderDetail?.price}</CardContent>
+                    <CardContent>Total Payment After discount: ₱{orderDetail?.price}</CardContent>
                   </Card>
                   <div style={{ marginTop: '25px' }}>
                     Enter Your Payment:
@@ -331,8 +344,13 @@ export default function Order() {
               ) : error ? (
                 <ErrorTwoToneIcon color={'error'} sx={{ fontSize: 100 }} />
               ) : (
-                <CheckCircleTwoToneIcon color={'success'} sx={{ fontSize: 100 }} />
-              )}
+                <div>
+                  <div>
+                    Your change: {userPayment - orderDetail.price}
+                  </div>
+                  <CheckCircleTwoToneIcon color={'success'} sx={{ fontSize: 100 }} />
+                </div>
+                )}
             </div>
           )}
 
