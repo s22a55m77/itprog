@@ -16,6 +16,7 @@ export default function CheckOut() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [userPayment, setUserPayment] = useState(0);
+  const [totalPayment, setTotalPayment] = useState();
   const [isValid, setIsValid] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [pendingPayment, setPendingPayment] = useState();
@@ -49,6 +50,11 @@ export default function CheckOut() {
       addOrder(obj).then((res) => {
         if (res.error === null) {
           setPendingPayment(res.data)
+          let sum = 0;
+          cart.cart.map((item) => {
+            sum += item.dish.quantity * item.dish.price;
+          })
+          setTotalPayment(sum);
           setIsLoading(false);
         }
       }).catch((err) => {
@@ -86,6 +92,7 @@ export default function CheckOut() {
       setIsOpen(true)
     }
     else {
+      setActiveStep(0);
       setIsOpen(false)
     }
   }
@@ -128,7 +135,7 @@ export default function CheckOut() {
           <div
             style={{
               width: '400px',
-              height:  error ? activeStep === 0 ? '600px' : '400px' : activeStep === 0 ? '550px' : '350px',
+              height:  error ? activeStep === 0 ? '600px' : '400px' : activeStep === 0 ? '550px' : '400px',
               position: 'absolute',
               top: '50%',
               transform: 'translate(0, -50%)',
@@ -207,10 +214,13 @@ export default function CheckOut() {
                         <CardContent>
                           Combo: {pendingPayment.combo}
                         </CardContent>
+                        <CardContent>
+                          Total Payment: { totalPayment }
+                        </CardContent>
                       </Card>
                       <Card style={{marginTop: '5px'}}>
                         <CardContent>
-                          Total Payment: ₱{pendingPayment.price}
+                          Total Payment After Discount: ₱{pendingPayment.price}
                         </CardContent>
                       </Card>
                       <div style={{ marginTop: '25px' }}>
@@ -244,7 +254,15 @@ export default function CheckOut() {
               >
                 { isLoading ?
                   <SyncTwoToneIcon color={'primary'} sx={{ fontSize: 50 }} className={'spin'}/> :
-                  error ? <ErrorTwoToneIcon color={'error'} sx={{ fontSize: 100 }}/> : <CheckCircleTwoToneIcon color={'success'} sx={{ fontSize: 100 }}/>
+                  error ? <ErrorTwoToneIcon color={'error'} sx={{ fontSize: 100 }}/> :
+                    (
+                      <div>
+                        <div>
+                          Your change: {userPayment - pendingPayment.price}
+                        </div>
+                        <CheckCircleTwoToneIcon color={'success'} sx={{ fontSize: 100 }}/>
+                      </div>
+                    )
                 }
               </div>
             }
