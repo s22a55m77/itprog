@@ -104,8 +104,10 @@ export default function CheckOut() {
   const handleCancel = () => {
     setIsLoading(true)
     cancelOrder(pendingPayment.orderNumber).then((res) => {
-      if (error == null)
+      if (error == null) {
         alert('Canceled!')
+        handleClose()
+      }
     }).catch((err) => {
       alert('Error!')
     }).finally(() => {
