@@ -217,7 +217,7 @@ export default function CheckOut() {
                           Combo: {pendingPayment.combo}
                         </CardContent>
                         <CardContent>
-                          Total Payment: { totalPayment }
+                          Total Price: { totalPayment }
                         </CardContent>
                       </Card>
                       <Card style={{marginTop: '5px'}}>
