@@ -306,7 +306,7 @@ export default function Order() {
                     <CardContent>Combo: {orderDetail?.combo ?? 'None'}</CardContent>
                   </Card>
                   <Card>
-                    <CardContent>Total Payment: { totalPayment }</CardContent>
+                    <CardContent>Total Price: { totalPayment }</CardContent>
                   </Card>
                   <Card style={{ marginTop: '5px' }}>
                     <CardContent>Total Payment After discount: ₱{orderDetail?.price}</CardContent>
