@@ -7,12 +7,12 @@ import {
   HttpCode,
   HttpStatus,
   InternalServerErrorException,
+  NotFoundException,
   Param,
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
-import _ from 'lodash';
 
 import { ResponseVo } from '../../common/vo/response.vo';
 import { RoleType } from '../../constants';
@@ -23,6 +23,7 @@ import { AddOrderDto } from './dto/add-order.dto';
 import { AddPaymentDto } from './dto/add-payment.dto';
 import type { OrderEntity } from './order.entity';
 import { OrderService } from './order.service';
+import type { OrderDetailEntity } from './order-detail.entity';
 import { OrderVo } from './vo/order.vo';
 
 @Controller('order')
@@ -43,30 +44,33 @@ export class OrderController {
     const orderNumber: string = Date.now().toString();
     const dishIds: number[] = [];
 
-    // Process dto to entity, push dishId to array
-    const orderEntities: OrderEntity[] = await Promise.all(
+    const orderDetailEntities: OrderDetailEntity[] = await Promise.all(
       addOrderDto.dishes.map((dish) => {
         dishIds.push(dish.id);
 
-        return Builder<OrderEntity>()
+        return Builder<OrderDetailEntity>()
           .dishId(dish.id)
-          .orderNumber(orderNumber)
-          .userId(user.id)
           .quantity(dish.quantity)
+          .orderNumber(orderNumber)
           .build();
       }),
     );
 
-    // Batch Insert with transactional
-    const insertedEntities: OrderEntity[] = await this.orderService.addOrderBatch(orderEntities);
-
-    // Process Entity to Vo
-    const orderVo: OrderVo = OrderVo.fromEntity(insertedEntities);
-
+    const price = await this.orderService.getPriceByOrderDetail(orderDetailEntities);
     const combo = await this.comboService.getComboByDishes(dishIds);
 
-    orderVo.combo = combo?.name;
-    orderVo.price = await this.orderService.getPriceByOrder(orderNumber);
+    const orderEntity: OrderEntity = Builder<OrderEntity>()
+      .orderNumber(orderNumber)
+      .userId(user.id)
+      .orderDetail(orderDetailEntities)
+      .price(price)
+      .comboId(combo?.id)
+      .build();
+
+    const insertedOrderEntity: OrderEntity = await this.orderService.addOrder(orderEntity);
+
+    // Process Entity to Vo
+    const orderVo: OrderVo = OrderVo.fromEntity(insertedOrderEntity, combo?.name);
 
     return ResponseVo.Success(orderVo);
   }
@@ -86,29 +90,37 @@ export class OrderController {
     @Param('orderNumber') orderNumber: string,
     @Body() addPaymentDto: AddPaymentDto,
   ): Promise<ResponseVo<OrderVo>> {
-    const orders: OrderEntity[] = await this.orderService.getOrdersByOrderNumber(orderNumber);
+    const order: OrderEntity | null = await this.orderService.getOrderByOrderNumber(orderNumber);
 
-    if (orders[0].userId !== user.id) {
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+
+    if (order.userId !== user.id) {
       throw new ForbiddenException('You are not the owner of this order');
     }
 
-    const price = await this.orderService.getPriceByOrder(orderNumber);
-
-    if (addPaymentDto.amount < price) {
+    if (addPaymentDto.amount < order.price) {
       throw new BadRequestException('The amount is not enough');
     }
 
     try {
-      await this.orderService.markCompleted(orderNumber);
+      await this.orderService.addPayment(orderNumber, order.price - addPaymentDto.amount);
     } catch {
       throw new InternalServerErrorException('Unknown Error, please contact the admin');
     }
 
-    const orderEntities = await this.orderService.getOrdersByOrderNumber(orderNumber);
+    const updatedOrder: OrderEntity | null = await this.orderService.getOrderByOrderNumber(
+      orderNumber,
+    );
 
-    const orderVo = OrderVo.fromEntity(orderEntities);
+    if (!updatedOrder) {
+      throw new InternalServerErrorException('Unknown Error, please contact the admin');
+    }
 
-    orderVo.price = await this.orderService.getPriceByOrder(orderNumber);
+    const comboName = await this.orderService.getComboNameByOrderNumber(orderNumber);
+
+    const orderVo = OrderVo.fromEntity(updatedOrder, comboName);
 
     return ResponseVo.Success(orderVo);
   }
@@ -123,28 +135,23 @@ export class OrderController {
   })
   @HttpCode(HttpStatus.OK)
   @Auth([RoleType.USER])
-  async getOrderPrice(
+  async getOrder(
     @AuthUser() user: UserEntity,
     @Param('orderNumber') orderNumber: string,
   ): Promise<ResponseVo<OrderVo>> {
-    const orders: OrderEntity[] = await this.orderService.getOrdersByOrderNumber(orderNumber);
+    const order: OrderEntity | null = await this.orderService.getOrderByOrderNumber(orderNumber);
 
-    if (orders[0].userId !== user.id) {
+    if (!order) {
+      throw new NotFoundException('No such order');
+    }
+
+    if (order.userId !== user.id) {
       throw new ForbiddenException('You are not the owner of this order');
     }
 
-    const orderEntities = await this.orderService.getOrdersByOrderNumber(orderNumber);
+    const comboName = await this.orderService.getComboNameByOrderNumber(orderNumber);
 
-    const orderVo = OrderVo.fromEntity(orderEntities);
-
-    const price = await this.orderService.getPriceByOrder(orderNumber);
-    orderVo.price = price;
-
-    const combo = await this.comboService.getComboByDishes(
-      orderVo.details.map((obj) => obj.dishId),
-    );
-
-    orderVo.combo = combo?.name;
+    const orderVo = OrderVo.fromEntity(order, comboName);
 
     return ResponseVo.Success(orderVo);
   }
@@ -160,9 +167,13 @@ export class OrderController {
   @Auth([RoleType.USER])
   @Post('/:orderNumber/cancel')
   async cancelOrder(@AuthUser() user: UserEntity, @Param('orderNumber') orderNumber: string) {
-    const orders: OrderEntity[] = await this.orderService.getOrdersByOrderNumber(orderNumber);
+    const order: OrderEntity | null = await this.orderService.getOrderByOrderNumber(orderNumber);
 
-    if (orders[0].userId !== user.id) {
+    if (!order) {
+      throw new NotFoundException('No such order');
+    }
+
+    if (order.userId !== user.id) {
       throw new ForbiddenException('You are not the owner of this order');
     }
 
@@ -172,11 +183,17 @@ export class OrderController {
       throw new InternalServerErrorException('Unknown Error, please contact the admin');
     }
 
-    const orderEntities = await this.orderService.getOrdersByOrderNumber(orderNumber);
+    const updatedOrder: OrderEntity | null = await this.orderService.getOrderByOrderNumber(
+      orderNumber,
+    );
 
-    const orderVo = OrderVo.fromEntity(orderEntities);
+    if (!updatedOrder) {
+      throw new InternalServerErrorException('Unknown Error, please contact the admin');
+    }
 
-    orderVo.price = await this.orderService.getPriceByOrder(orderNumber);
+    const comboName = await this.orderService.getComboNameByOrderNumber(orderNumber);
+
+    const orderVo = OrderVo.fromEntity(updatedOrder, comboName);
 
     return ResponseVo.Success(orderVo);
   }
@@ -195,15 +212,16 @@ export class OrderController {
   @Auth([RoleType.USER])
   async getOrderByUserId(@AuthUser() user: UserEntity): Promise<ResponseVo<OrderVo[]>> {
     // the result may contains different orders
-    const orderEntities = await this.orderService.getOrdersByUserId(user.id);
+    const orderEntities: OrderEntity[] = await this.orderService.getOrderByUserId(user.id);
 
-    // grouped order base on the order number
-    const groupedOrder = _.toArray(_.groupBy(orderEntities, 'orderNumber'));
+    const orderVoArr = await Promise.all(
+      orderEntities.map(async (order) => {
+        const comboName = await this.orderService.getComboNameByOrderNumber(order.orderNumber);
 
-    const orderVo = groupedOrder.map((orders: OrderEntity[]) => {
-      return OrderVo.fromEntity(orders);
-    });
+        return OrderVo.fromEntity(order, comboName);
+      }),
+    );
 
-    return ResponseVo.Success(orderVo);
+    return ResponseVo.Success(orderVoArr);
   }
 }

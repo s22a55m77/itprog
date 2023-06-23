@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { DishEntity } from '../dish/dish.entity';
+import { OrderEntity } from '../order/order.entity';
 
 @Entity({ name: 'combos' })
 export class ComboEntity {
@@ -19,6 +20,9 @@ export class ComboEntity {
     foreignKeyConstraintName: 'FK_combos_dishId_dishes_id',
   })
   dish: DishEntity;
+
+  @OneToMany(() => OrderEntity, (orderEntity) => orderEntity.combo)
+  order: OrderEntity[];
 
   @Column({ type: 'int' })
   dishId: number;
