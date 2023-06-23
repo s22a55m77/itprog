@@ -11,7 +11,7 @@ export class OrderDetailEntity {
   })
   id: number;
 
-  @ManyToOne(() => OrderEntity, (orderEntity) => orderEntity.orderNumber)
+  @ManyToOne(() => OrderEntity, (orderEntity) => orderEntity.orderDetail)
   @JoinColumn({
     name: 'order_number',
     referencedColumnName: 'orderNumber',

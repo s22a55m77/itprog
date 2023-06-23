@@ -1,5 +1,4 @@
 import {
-  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -53,7 +52,10 @@ export class OrderEntity {
   @Column({ type: 'int', nullable: true })
   comboId?: number;
 
-  @OneToMany(() => OrderDetailEntity, (orderDetail) => orderDetail.order)
+  @OneToMany(() => OrderDetailEntity, (orderDetail) => orderDetail.order, {
+    cascade: true,
+    eager: true,
+  })
   orderDetail: OrderDetailEntity[];
 
   @CreateDateColumn({ type: 'datetime' })
@@ -64,11 +66,4 @@ export class OrderEntity {
 
   @Column({ type: 'datetime', nullable: true })
   completedAt: Date;
-
-  @BeforeUpdate()
-  beforeUpdate() {
-    if (this.status === OrderStatus.COMPLETED) {
-      this.completedAt = new Date();
-    }
-  }
 }

@@ -20,11 +20,11 @@ export class OrderService {
   ) {}
 
   async addOrder(orderEntity: OrderEntity): Promise<OrderEntity> {
-    const result = await this.orderRepository.insert(orderEntity);
+    const result = await this.orderRepository.save(orderEntity);
 
     return this.orderRepository.findOneOrFail({
       where: {
-        orderNumber: result.identifiers[0].id,
+        orderNumber: result.orderNumber,
       },
     });
   }
@@ -70,7 +70,7 @@ export class OrderService {
             priceArr.push(dish.price);
           });
 
-          price += _.sum(priceArr) * (1 - combo.discount);
+          price += _.sum(priceArr) * ((100 - combo.discount) * 0.01);
 
           orderDetail.forEach((order) => (order.quantity -= 1));
         } else {
@@ -204,7 +204,10 @@ export class OrderService {
   }
 
   async addPayment(orderNumber: string, change: number) {
-    await this.orderRepository.update({ orderNumber }, { status: OrderStatus.COMPLETED, change });
+    await this.orderRepository.update(
+      { orderNumber },
+      { status: OrderStatus.COMPLETED, change, completedAt: new Date() },
+    );
   }
 
   async markCancelled(orderNumber: string) {

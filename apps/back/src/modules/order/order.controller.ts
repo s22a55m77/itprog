@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
+import _ from 'lodash';
 
 import { ResponseVo } from '../../common/vo/response.vo';
 import { RoleType } from '../../constants';
@@ -56,7 +57,7 @@ export class OrderController {
       }),
     );
 
-    const price = await this.orderService.getPriceByOrderDetail(orderDetailEntities);
+    const price = await this.orderService.getPriceByOrderDetail(_.cloneDeep(orderDetailEntities));
     const combo = await this.comboService.getComboByDishes(dishIds);
 
     const orderEntity: OrderEntity = Builder<OrderEntity>()
@@ -105,7 +106,7 @@ export class OrderController {
     }
 
     try {
-      await this.orderService.addPayment(orderNumber, order.price - addPaymentDto.amount);
+      await this.orderService.addPayment(orderNumber, addPaymentDto.amount - order.price);
     } catch {
       throw new InternalServerErrorException('Unknown Error, please contact the admin');
     }
