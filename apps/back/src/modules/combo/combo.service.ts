@@ -27,4 +27,12 @@ export class ComboService {
 
     return qb.getOne();
   }
+
+  getComboById(id: number): Promise<ComboEntity | null> {
+    return this.comboRepository.findOne({
+      where: {
+        id,
+      },
+    });
+  }
 }

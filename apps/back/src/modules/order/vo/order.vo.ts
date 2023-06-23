@@ -2,7 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Builder } from 'builder-pattern';
 
 import { OrderStatus } from '../../../constants';
-import { OrderEntity } from '../order.entity';
+import type { OrderEntity } from '../order.entity';
 
 class OrderDetailsVo {
   @ApiProperty()
@@ -30,35 +30,20 @@ export class OrderVo {
   })
   combo?: string;
 
-  static fromEntity(order: OrderEntity | OrderEntity[]): OrderVo {
-    if (order instanceof OrderEntity && !Array.isArray(order)) {
-      const orderDetailsVo = Builder<OrderDetailsVo>()
-        .dishId(order.dishId)
-        .quantity(order.quantity)
+  static fromEntity(order: OrderEntity, combo?: string): OrderVo {
+    const orderDetailsVo: OrderDetailsVo[] = order.orderDetail.map((orderDetail) => {
+      return Builder<OrderDetailsVo>()
+        .dishId(orderDetail.dishId)
+        .quantity(orderDetail.quantity)
         .build();
+    });
 
-      return Builder<OrderVo>()
-        .orderNumber(order.orderNumber)
-        .status(order.status)
-        .details([orderDetailsVo])
-        .build();
-    }
-
-    if (Array.isArray(order)) {
-      const orderDetailsVo = order.map((singleOrder: OrderEntity): OrderDetailsVo => {
-        return Builder<OrderDetailsVo>()
-          .dishId(singleOrder.dishId)
-          .quantity(singleOrder.quantity)
-          .build();
-      });
-
-      return Builder<OrderVo>()
-        .orderNumber(order[0].orderNumber as string)
-        .status(order[0].status as OrderStatus)
-        .details(orderDetailsVo)
-        .build();
-    }
-
-    return new OrderVo();
+    return Builder<OrderVo>()
+      .orderNumber(order.orderNumber)
+      .status(order.status)
+      .price(order.price)
+      .details(orderDetailsVo)
+      .combo(combo)
+      .build();
   }
 }

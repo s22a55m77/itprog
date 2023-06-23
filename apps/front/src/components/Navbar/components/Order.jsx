@@ -174,7 +174,7 @@ export default function Order() {
         {isLoading && !order ? (
           <SyncTwoToneIcon color={'primary'} sx={{ fontSize: 50 }} className={'spin'} />
         ) : isLogin ? (
-          order && order > 0 ? (
+          order && order.length > 0 ? (
             order.map((item) => {
               return (
                 <div key={item.orderNumber} onClick={() => handleOrderClick(item.orderNumber, item.status)}>

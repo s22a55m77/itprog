@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColum
 
 import { CategoryEntity } from '../category/category.entity';
 import { ComboEntity } from '../combo/combo.entity';
-import { OrderEntity } from '../order/order.entity';
+import { OrderDetailEntity } from '../order/order-detail.entity';
 
 @Entity({ name: 'dishes' })
 export class DishEntity {
@@ -20,8 +20,8 @@ export class DishEntity {
   @OneToMany(() => ComboEntity, (comboEntity) => comboEntity.dish)
   combo: ComboEntity[];
 
-  @OneToMany(() => OrderEntity, (orderEntity) => orderEntity.dish)
-  orders: OrderEntity[];
+  @OneToMany(() => OrderDetailEntity, (orderEntity) => orderEntity.dish)
+  orders: OrderDetailEntity[];
 
   @Column({ type: 'int' })
   categoryId: number;
@@ -29,7 +29,7 @@ export class DishEntity {
   @Column({ type: 'varchar' })
   name: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   description: string;
 
   @Column({ type: 'float' })

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import _ from 'lodash';
 import { Repository } from 'typeorm';
@@ -7,45 +7,29 @@ import { OrderStatus } from '../../constants';
 import { ComboService } from '../combo/combo.service';
 import { DishService } from '../dish/dish.service';
 import { OrderEntity } from './order.entity';
+import { OrderDetailEntity } from './order-detail.entity';
 
 @Injectable()
 export class OrderService {
   constructor(
+    @InjectRepository(OrderDetailEntity)
+    private orderDetailRepository: Repository<OrderDetailEntity>,
     @InjectRepository(OrderEntity) private orderRepository: Repository<OrderEntity>,
     private dishService: DishService,
     private comboService: ComboService,
   ) {}
 
-  async addOrder(orderEntity: OrderEntity) {
-    const result = await this.orderRepository.insert(orderEntity);
+  async addOrder(orderEntity: OrderEntity): Promise<OrderEntity> {
+    const result = await this.orderRepository.save(orderEntity);
 
     return this.orderRepository.findOneOrFail({
       where: {
-        id: Number(result.identifiers[0].id),
+        orderNumber: result.orderNumber,
       },
     });
   }
 
-  async addOrderBatch(orderEntities: OrderEntity[]): Promise<OrderEntity[]> {
-    const insertedOrderEntities: OrderEntity[] = [];
-
-    await this.orderRepository.manager.transaction(async (transactionalEntityManager) => {
-      await Promise.allSettled(
-        orderEntities.map(async (orderEntity) => {
-          const insertedOrderEntity = await transactionalEntityManager.save(
-            OrderEntity,
-            orderEntity,
-          );
-
-          insertedOrderEntities.push(insertedOrderEntity);
-        }),
-      );
-    });
-
-    return insertedOrderEntities;
-  }
-
-  getOrdersByUserId(userId: number) {
+  getOrderByUserId(userId: number) {
     return this.orderRepository.find({
       where: {
         userId,
@@ -53,8 +37,75 @@ export class OrderService {
     });
   }
 
+  async getPriceByOrderDetail(orderDetail: OrderDetailEntity[]): Promise<number> {
+    const dishIds: number[] = [];
+
+    // get all dishes of current order
+    const dishEntities = await Promise.all(
+      orderDetail.map(async (singleOrder) => {
+        dishIds.push(singleOrder.dishId);
+
+        return this.dishService.getDishById(singleOrder.dishId);
+      }),
+    );
+
+    let price = 0;
+
+    // the max quantity
+    const n = _.maxBy(orderDetail, 'quantity')!.quantity;
+
+    // Get the Combo according to dishes
+    const combo = await this.comboService.getComboByDishes(dishIds);
+
+    // If there is a combo
+    if (combo) {
+      for (let i = 0; i < n; i++) {
+        // this statement checks if there the dishes can make a combo,
+        // to avoid that there is an extra item
+        if (orderDetail.filter((order) => order.quantity !== 0).length === orderDetail.length) {
+          // the array that will store the price of each items
+          const priceArr: number[] = [];
+
+          dishEntities.forEach((dish) => {
+            priceArr.push(dish.price);
+          });
+
+          price += _.sum(priceArr) * ((100 - combo.discount) * 0.01);
+
+          orderDetail.forEach((order) => (order.quantity -= 1));
+        } else {
+          // get the dishes that are not 0
+          const notEmptyDish = orderDetail.filter((order) => order.quantity !== 0);
+
+          notEmptyDish.forEach((dish) => {
+            // add dishes price
+            price += _.find(dishEntities, { id: dish.dishId })!.price;
+
+            orderDetail.forEach((order) => (order.quantity -= 1));
+          });
+        }
+      }
+    }
+
+    // there is no combo
+    if (!combo) {
+      for (let i = 0; i < n; i++) {
+        const notEmptyDish = orderDetail.filter((dish) => dish.quantity !== 0);
+
+        notEmptyDish.forEach((dish) => {
+          // add dishes price
+          price += _.find(dishEntities, { id: dish.dishId })!.price;
+
+          orderDetail.forEach((order) => (order.quantity -= 1));
+        });
+      }
+    }
+
+    return price;
+  }
+
   async getPriceByOrder(orderNumber: string) {
-    const orders = await this.orderRepository.find({
+    const orders = await this.orderDetailRepository.find({
       where: {
         orderNumber,
       },
@@ -63,7 +114,7 @@ export class OrderService {
     const dishIds = _.map(orders, 'dishId');
 
     // get all dishes of current order
-    const dishEntitites = await Promise.all(
+    const dishEntities = await Promise.all(
       dishIds.map(async (id) => {
         return this.dishService.getDishById(id);
       }),
@@ -86,7 +137,7 @@ export class OrderService {
           // the array that will store the price of each items
           const priceArr: number[] = [];
 
-          dishEntitites.forEach((dish) => {
+          dishEntities.forEach((dish) => {
             priceArr.push(dish.price);
           });
 
@@ -99,7 +150,7 @@ export class OrderService {
 
           notEmptyDish.forEach((dish) => {
             // add dishes price
-            price += _.find(dishEntitites, { id: dish.dishId })!.price;
+            price += _.find(dishEntities, { id: dish.dishId })!.price;
 
             orders.forEach((order) => (order.quantity -= 1));
           });
@@ -114,7 +165,7 @@ export class OrderService {
 
         notEmptyDish.forEach((dish) => {
           // add dishes price
-          price += _.find(dishEntitites, { id: dish.dishId })!.price;
+          price += _.find(dishEntities, { id: dish.dishId })!.price;
 
           orders.forEach((order) => (order.quantity -= 1));
         });
@@ -124,16 +175,39 @@ export class OrderService {
     return price;
   }
 
-  getOrdersByOrderNumber(orderNumber: string): Promise<OrderEntity[]> {
-    return this.orderRepository.find({
+  getOrderByOrderNumber(orderNumber: string): Promise<OrderEntity | null> {
+    return this.orderRepository.findOne({
       where: {
         orderNumber,
       },
     });
   }
 
-  async markCompleted(orderNumber: string) {
-    await this.orderRepository.update({ orderNumber }, { status: OrderStatus.COMPLETED });
+  async getComboNameByOrderNumber(orderNumber: string): Promise<string | undefined> {
+    const order = await this.orderRepository.findOne({
+      where: {
+        orderNumber,
+      },
+    });
+
+    if (!order) {
+      throw new NotFoundException('No such order');
+    }
+
+    if (order.comboId === undefined) {
+      return undefined;
+    }
+
+    const combo = await this.comboService.getComboById(order.comboId);
+
+    return combo?.name;
+  }
+
+  async addPayment(orderNumber: string, change: number) {
+    await this.orderRepository.update(
+      { orderNumber },
+      { status: OrderStatus.COMPLETED, change, completedAt: new Date() },
+    );
   }
 
   async markCancelled(orderNumber: string) {

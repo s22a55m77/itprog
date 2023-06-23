@@ -1,24 +1,22 @@
 import {
-  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  OneToMany,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { OrderStatus } from '../../constants';
-import { DishEntity } from '../dish/dish.entity';
+import { ComboEntity } from '../combo/combo.entity';
 import { UserEntity } from '../user/user.entity';
+import { OrderDetailEntity } from './order-detail.entity';
 
 @Entity({ name: 'orders' })
 export class OrderEntity {
-  @PrimaryGeneratedColumn('increment', { type: 'int', primaryKeyConstraintName: 'PK_orders_id' })
-  id: number;
-
-  @Column({ type: 'varchar' })
+  @PrimaryColumn({ type: 'varchar' })
   orderNumber: string;
 
   @ManyToOne(() => UserEntity, (userEntity) => userEntity.id, {
@@ -34,24 +32,31 @@ export class OrderEntity {
   @Column({ type: 'int' })
   userId: number;
 
-  @ManyToOne(() => DishEntity, (dishEntity) => dishEntity.id, {
-    createForeignKeyConstraints: true,
-  })
-  @JoinColumn({
-    name: 'dish_id',
-    referencedColumnName: 'id',
-    foreignKeyConstraintName: 'FK_orders_dishId_dishes_id',
-  })
-  dish: DishEntity;
-
-  @Column({ type: 'int' })
-  dishId: number;
-
-  @Column({ type: 'int' })
-  quantity: number;
-
   @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.PENDING_PAYMENT })
   status: OrderStatus;
+
+  @Column({ type: 'float' })
+  price: number;
+
+  @Column({ type: 'float', nullable: true })
+  change: number;
+
+  @ManyToOne(() => ComboEntity, (comboEntity) => comboEntity.id)
+  @JoinColumn({
+    name: 'combo_id',
+    referencedColumnName: 'id',
+    foreignKeyConstraintName: 'FK_orders_comboId_combos_id',
+  })
+  combo?: ComboEntity;
+
+  @Column({ type: 'int', nullable: true })
+  comboId?: number;
+
+  @OneToMany(() => OrderDetailEntity, (orderDetail) => orderDetail.order, {
+    cascade: true,
+    eager: true,
+  })
+  orderDetail: OrderDetailEntity[];
 
   @CreateDateColumn({ type: 'datetime' })
   createdAt: Date;
@@ -61,11 +66,4 @@ export class OrderEntity {
 
   @Column({ type: 'datetime', nullable: true })
   completedAt: Date;
-
-  @BeforeUpdate()
-  beforeUpdate() {
-    if (this.status === OrderStatus.COMPLETED) {
-      this.completedAt = new Date();
-    }
-  }
 }
