@@ -174,35 +174,36 @@ export default function Order() {
         {isLoading && !order ? (
           <SyncTwoToneIcon color={'primary'} sx={{ fontSize: 50 }} className={'spin'} />
         ) : isLogin ? (
-          order &&
-          order.map((item) => {
-            return (
-              <div key={item.orderNumber} onClick={() => handleOrderClick(item.orderNumber, item.status)}>
-                <MenuItem>
-                  <div>
-                    {item.orderNumber}
+          order && order > 0 ? (
+            order.map((item) => {
+              return (
+                <div key={item.orderNumber} onClick={() => handleOrderClick(item.orderNumber, item.status)}>
+                  <MenuItem>
                     <div>
-                      status:{' '}
-                      <span
-                        style={{
-                          color:
-                            item.status === 'PENDING_PAYMENT'
-                              ? 'orange'
-                              : item.status === 'CANCELLED'
-                              ? 'red'
-                              : 'green',
-                        }}
-                      >
+                      {item.orderNumber}
+                      <div>
+                        status:{' '}
+                        <span
+                          style={{
+                            color:
+                              item.status === 'PENDING_PAYMENT'
+                                ? 'orange'
+                                : item.status === 'CANCELLED'
+                                  ? 'red'
+                                  : 'green',
+                          }}
+                        >
                         {' '}
-                        {item.status}
+                          {item.status}
                       </span>
+                      </div>
                     </div>
-                  </div>
-                </MenuItem>
-                <Divider style={{ width: '100%' }} />
-              </div>
-            );
-          })
+                  </MenuItem>
+                  <Divider style={{ width: '100%' }} />
+                </div>
+              );
+            })
+          ) : (<div style={{padding: '5px'}}> None </div>)
         ) : (
           <div
             style={{
