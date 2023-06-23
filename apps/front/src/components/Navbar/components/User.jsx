@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getCookie, setCookie } from '../../../utils';
-import { Alert, Button, TextField } from '@mui/material';
+import { Alert, Button, Menu, TextField } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import { login, me, register } from '../../../services/api';
 import { LoadingButton } from '@mui/lab';
@@ -14,6 +14,7 @@ export default function User () {
   const [isAlert, setIsAlert] = useState(null);
   const [isLoading, setIsLoading] = useState(false)
   const [user, setUser] = useState();
+  const [isMenuOpen, setIsMenuOpen] = useState(null);
 
   useEffect(() => {
     if(getCookie('jwtToken') === "")
@@ -66,11 +67,16 @@ export default function User () {
     }, 10);
   }
 
+  const handleLogout = () => {
+    setCookie('jwtToken', "")
+    alert("Logout Success! Please Refresh")
+  }
+
   return (
     <>
       {
         isLogin ?
-          <div style={{marginRight: '10px'}}>{user && user}</div> :
+          <div style={{marginRight: '10px'}} onMouseEnter={(e) => setIsMenuOpen(e.currentTarget)}>{user && user}</div> :
           <div>
             <Button style={{whiteSpace: 'nowrap'}} onClick={() => setIsOpen(true)}>
               Sign In
@@ -168,6 +174,23 @@ export default function User () {
             </form>
         </div>
       </Modal>
+
+      <Menu
+        id={'Logout Menu'}
+        open={Boolean(isMenuOpen)}
+        anchorEl={isMenuOpen}
+        disableScrollLock={true}
+        PaperProps={{
+          style: {
+            transform: 'translateY(-15px)',
+          },
+        }}
+        onClose={() => setIsMenuOpen(false)}
+      >
+        <div>
+          <Button style={{fontSize: '12px'}} color={'error'} onClick={handleLogout}> Logout </Button>
+        </div>
+      </Menu>
     </>
   )
 }
