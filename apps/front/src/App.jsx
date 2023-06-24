@@ -8,6 +8,10 @@ export const CartContext = createContext([]);
 function App() {
   const [cart, setCart] = useState([]);
 
+  useEffect(() => {
+    document.title='ITPROG'
+  }, [])
+
   const addCart = (obj) => {
     const arr = cart
     arr.push(obj)
