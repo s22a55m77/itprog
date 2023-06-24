@@ -89,87 +89,12 @@ export class OrderService {
 
     // there is no combo
     if (!combo) {
-      for (let i = 0; i < n; i++) {
-        const notEmptyDish = orderDetail.filter((dish) => dish.quantity !== 0);
+      const notEmptyDish = orderDetail.filter((dish) => dish.quantity !== 0);
 
-        notEmptyDish.forEach((dish) => {
-          // add dishes price
-          price += _.find(dishEntities, { id: dish.dishId })!.price;
-
-          orderDetail.forEach((order) => (order.quantity -= 1));
-        });
-      }
-    }
-
-    return price;
-  }
-
-  async getPriceByOrder(orderNumber: string) {
-    const orders = await this.orderDetailRepository.find({
-      where: {
-        orderNumber,
-      },
-    });
-
-    const dishIds = _.map(orders, 'dishId');
-
-    // get all dishes of current order
-    const dishEntities = await Promise.all(
-      dishIds.map(async (id) => {
-        return this.dishService.getDishById(id);
-      }),
-    );
-
-    let price = 0;
-
-    // the max quantity
-    const n = _.maxBy(orders, 'quantity')!.quantity;
-
-    // Get the Combo according to dishes
-    const combo = await this.comboService.getComboByDishes(dishIds);
-
-    // If there is a combo
-    if (combo) {
-      for (let i = 0; i < n; i++) {
-        // this statement checks if there the dishes can make a combo,
-        // to avoid that there is an extra item
-        if (orders.filter((order) => order.quantity !== 0).length === orders.length) {
-          // the array that will store the price of each items
-          const priceArr: number[] = [];
-
-          dishEntities.forEach((dish) => {
-            priceArr.push(dish.price);
-          });
-
-          price += _.sum(priceArr) * 0.9;
-
-          orders.forEach((order) => (order.quantity -= 1));
-        } else {
-          // get the dishes that are not 0
-          const notEmptyDish = orders.filter((order) => order.quantity !== 0);
-
-          notEmptyDish.forEach((dish) => {
-            // add dishes price
-            price += _.find(dishEntities, { id: dish.dishId })!.price;
-
-            orders.forEach((order) => (order.quantity -= 1));
-          });
-        }
-      }
-    }
-
-    // there is no combo
-    if (!combo) {
-      for (let i = 0; i < n; i++) {
-        const notEmptyDish = orders.filter((dish) => dish.quantity !== 0);
-
-        notEmptyDish.forEach((dish) => {
-          // add dishes price
-          price += _.find(dishEntities, { id: dish.dishId })!.price;
-
-          orders.forEach((order) => (order.quantity -= 1));
-        });
-      }
+      notEmptyDish.forEach((dish) => {
+        // add dishes price
+        price += _.find(dishEntities, { id: dish.dishId })!.price * dish.quantity;
+      });
     }
 
     return price;
