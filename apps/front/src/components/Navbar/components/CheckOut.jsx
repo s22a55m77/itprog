@@ -214,7 +214,7 @@ export default function CheckOut() {
                     <div style={{ textAlign: 'left'}}>
                       <Card>
                         <CardContent>
-                          Combo: {pendingPayment.combo}
+                          Combo: {pendingPayment.combo ?? 'None'}
                         </CardContent>
                         <CardContent>
                           Total Price: { totalPayment }
