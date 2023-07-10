@@ -20,8 +20,7 @@ a {
   background-color: white;
   color: rgba(0,0,0,.85);
   font-size: 14px;
-  line-height: 1.5715;
-  box-sizing: border-box;
+  line-height: 1.5;
   margin-top: -.1px;
   padding-top: .1px;
   padding-left: 15px;
@@ -129,7 +128,6 @@ button:focus-visible {
   font-size: 14px;
   color: rgba(255, 255, 255);
   line-height: 48px;
-  box-sizing: border-box;
   position: relative;
   display: flex;
   align-items: center;
@@ -150,10 +148,8 @@ button:focus-visible {
 .table {
   margin-top: 10px;
   color: rgba(0,0,0,.85);
-  font-variant: tabular-nums;
-  line-height: 1.5715;
+  line-height: 1.5;
   list-style: none;
-  font-feature-settings: "tnum","tnum";
   font-size: 14px;
   box-sizing: border-box;
   width: 100%;
@@ -166,10 +162,8 @@ button:focus-visible {
 .table-header {
   color: rgba(0, 0, 0, 0.85);
   background-color: rgba(252, 252, 252, 0.911);
-  font-variant: tabular-nums;
-  line-height: 1.5715;
+  line-height: 1.5;
   list-style: none;
-  font-feature-settings: "tnum","tnum";
   font-size: 14px;
   border-collapse: separate;
   border-spacing: 0;
@@ -189,4 +183,9 @@ th:last-child, td:last-child {
 tr:hover {
   background-color: rgba(238, 238, 238, 0.911);
   transition: 0.5s;
+}
+
+img {
+  width: 150px;
+  object-fit: cover;
 }

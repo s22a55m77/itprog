@@ -19,43 +19,20 @@
   <div class="container">
     <!-- SIDEBAR -->
     <div class="sidebar">
-      <a class="menu active" href="">
+      <a class="menu" href="category.php">
         Category
       </a> 
-      <a class="menu" href="">
+      <a class="menu" href="dish.php">
         Dish
       </a> 
-      <a class="menu" href="">
+      <a class="menu" href="combo.php">
         Combo
       </a> 
     </div>
     
     <!-- BODY -->
     <div class="body">
-      <div class="header">
-        Category
-      </div>
-      <div class="content">
-        <div class="content-header">
-          <span>Category Table</span>
-          <div>
-            <button>+ New</button>
-            <button>Refresh</button>
-          </div>
-        </div>  
-        <table class="table">
-          <tr class=table-header>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Action</th>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>2</td>
-            <td>Delete Update</td>
-          </tr>
-        </table>
-      </div>
+      1
     </div>
   </div>
 </body>
