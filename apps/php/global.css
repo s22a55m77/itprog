@@ -124,6 +124,19 @@ button:focus-visible {
   transition: outline-offset 0s,outline 0s;
 }
 
+.error {
+  background-color: #ff4d4f;
+}
+
+.error:hover {
+  background-color: #ff7875;
+}
+
+.error:active {
+  background-color: #f5222d;
+}
+
+
 .navbar {
   font-size: 14px;
   color: rgba(255, 255, 255);
@@ -176,10 +189,6 @@ th, td {
   text-align: center;
 }
 
-th:last-child, td:last-child {
-  max-width: 10%;
-}
-
 tr:hover {
   background-color: rgba(238, 238, 238, 0.911);
   transition: 0.5s;
@@ -188,4 +197,54 @@ tr:hover {
 img {
   width: 80px;
   object-fit: cover;
+}
+
+.delete-container {
+  margin: 20vh auto;
+  width: 30%;
+  height: auto;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.delete-header {
+  padding: 24px;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.delete-content {
+  padding: 24px;
+}
+
+.login-container {
+  margin: 20vh auto;
+  width: 20%;
+  height: auto;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.login-header {
+  padding: 24px;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.login-content {
+  padding: 24px;
+}
+
+.login-container input {
+  display: block;
+  margin-top: 10px;
+  height: 30px;
+  width: 90%;
+  border: 0.5px solid rgba(184, 184, 184, 0.911);
+  border-radius: 2px;
+  padding: 10px;
+}
+
+.login-container input:focus {
+  outline: solid #0958d9;
 }
