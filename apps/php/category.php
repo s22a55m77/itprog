@@ -4,6 +4,12 @@
   <title>Dish Management</title>
   <link rel="stylesheet" href="global.css">
 </head>
+
+<!-- TODO add the session guard here
+          redirect to login.php if not login
+-->
+
+
 <body>
   <!-- NAVBAR -->
   <div class="navbar">

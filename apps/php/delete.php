@@ -6,8 +6,14 @@
   <link rel="stylesheet" href="global.css">
 </head>
 
+<!-- TODO add the session guard here
+          redirect to login.php if not login
+-->
+
 <body>
-  <!-- TODO pass the whole sql statement here using POST method -->
+  <!-- TODO get the whole sql statement here using POST method 
+            so that we can know what to delete
+  -->
 
   <div class="navbar">
     <div>

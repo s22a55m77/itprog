@@ -6,6 +6,10 @@
   <link rel="stylesheet" href="global.css">
 </head>
 
+<!-- TODO get the login credentials here using $_POST 
+          redirect to main.php after successfully login
+-->
+
 <body>
   <div class="navbar">
     <div>
@@ -22,7 +26,7 @@
           Login Form
         </div>
         <div class="login-content">
-          <form action="">
+          <form action="login.php" method="POST">
             <input placeholder="username"/>
             <input type="password" placeholder="password"/>
           </form>
