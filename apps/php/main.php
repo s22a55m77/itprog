@@ -5,6 +5,8 @@
   <link rel="stylesheet" href="global.css">
 </head>
 <body>
-  Body
+  <button class="button">
+    Click me
+  </button>
 </body>
 </html>
