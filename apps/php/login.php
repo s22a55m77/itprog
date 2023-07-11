@@ -9,6 +9,26 @@
 <!-- TODO get the login credentials here using $_POST 
           redirect to main.php after successfully login
 -->
+<?php
+    mysql_connect("localhost", "root", "") or die(mysql_error()); // Connect to database server(localhost)
+    mysql_select_db("itprog.mysql.database.azure.com") or die(mysql_error()); // Select database.
+
+    if(isset($_POST['username']) && !empty($_POST['username']) AND isset($_POST['password']) && !empty($_POST['password'])){
+    $UserID = mysql_escape_string($_POST['username']);
+    $pass = mysql_escape_string(md5($_POST['password']));
+
+    $search = mysql_query("SELECT username, password FROM users WHERE username='".$UserID."' AND password='".$pass."'") or die(mysql_error()); 
+    $match  = mysql_num_rows($search);   //search database for user info
+
+    if($match > 0){
+         $msg = 'Login Complete!';    
+         header("location: main.php");
+         exit;   
+    }else{
+         $msg = 'Login Failed!<br /> Please make sure that you enter the correct details.';
+    }
+ }
+?>
 
 <body>
   <div class="navbar">
