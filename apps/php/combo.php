@@ -9,22 +9,22 @@
           redirect to login.php if not login
 -->
 <?php
+    session_start();
+    $conn = mysqli_connect("localhost", "root", "DLSU1234!") or die ("Unable to connect!". mysqli_error());
+    mysqli_select_db($conn, "itprog.mysql.database.azure.com");
 
-    $username=$_POST['username'];
-    $password=$_POST['password'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-$sql= "SELECT * FROM users WHERE username =='$username' and password =='$password'";  
-$query= mysqli_query($con, $sql); 
+    $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";  
+    $query = mysqli_query($conn, $sql); 
 
-while($User=$result->fetch_assoc()) 
-{
-    if($User['username'] == $username && $User['password'] == $password ) 
-    {
-        header("Location: admin.php"); 
-    }else {
+    if ($query->num_rows > 0) {
+        echo("You logged in successfully");
+    } else {
         header("Location: login.php");
     }
-}
+?>
 ?>
 <body>
   <!-- NAVBAR -->
@@ -80,6 +80,29 @@ while($User=$result->fetch_assoc())
             <th>Action</th>
           </tr>
           <!-- TODO fetch data from db -->
+           <?php
+
+             $sql = "SELECT * FROM combos"; 
+             $query = mysqli_query($conn, $sql); 
+
+             if (mysqli_num_rows($query) > 0) {
+             while ($row = mysqli_fetch_assoc($query)) {
+             $id = $row['id'];
+             $name = $row['name'];
+             $dish_id = $row['dish_id'];
+             $discount = $row['discount'];
+            
+             echo "ID: " . $id . "<br>";
+             echo "Name: " . $name . "<br>";
+             echo "Dish: " . $dish_id . "<br>";
+             echo "Discount: " . $discount . "<br>";
+             echo "<br>";
+            } 
+            } else {
+                echo "No data found.";
+            }
+            mysqli_close($conn);
+           ?>
           <tr>
             <td>1</td>
             <td>Chicken Mash Tea Combo</td>

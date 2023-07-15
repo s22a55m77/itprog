@@ -9,23 +9,23 @@
           redirect to login.php if not login
 -->
 <?php
+    session_start();
+    $conn = mysqli_connect("localhost", "root", "DLSU1234!") or die ("Unable to connect!". mysqli_error());
+    mysqli_select_db($conn, "itprog.mysql.database.azure.com");
 
-    $username=$_POST['username'];
-    $password=$_POST['password'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-$sql= "SELECT * FROM users WHERE username =='$username' and password =='$password'";  
-$query= mysqli_query($con, $sql); 
+    $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";  
+    $query = mysqli_query($con, $sql); 
 
-while($User=$result->fetch_assoc()) 
-{
-    if($User['username'] == $username && $User['password'] == $password ) 
-    {
-        header("Location: admin.php"); 
-    }else {
+    if ($query->num_rows > 0) {
+        echo("You logged in successfully");
+    } else {
         header("Location: login.php");
     }
-}
 ?>
+
 <body>
   <!-- NAVBAR -->
   <div class="navbar">
