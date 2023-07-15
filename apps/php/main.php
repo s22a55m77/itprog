@@ -9,18 +9,16 @@
           redirect to login.php if not login
 -->
 <?php
-require 'login.php'; 
 
-    $input=$_POST['input'];
     $username=$_POST['username'];
     $password=$_POST['password'];
 
-$sql= "SELECT * FROM users WHERE username ='$username' and password='$password'";  
+$sql= "SELECT * FROM users WHERE username =='$username' and password =='$password'";  
 $query= mysqli_query($con, $sql); 
 
 while($User=$result->fetch_assoc()) 
 {
-    if($User['username'] == $username && $User['password'] == $password == 'Admin') 
+    if($User['username'] == $username && $User['password'] == $password ) 
     {
         header("Location: admin.php"); 
     }else {

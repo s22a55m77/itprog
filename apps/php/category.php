@@ -8,8 +8,24 @@
 <!-- TODO add the session guard here
           redirect to login.php if not login
 -->
+<?php
 
+    $username=$_POST['username'];
+    $password=$_POST['password'];
 
+$sql= "SELECT * FROM users WHERE username =='$username' and password =='$password'";  
+$query= mysqli_query($con, $sql); 
+
+while($User=$result->fetch_assoc()) 
+{
+    if($User['username'] == $username && $User['password'] == $password ) 
+    {
+        header("Location: admin.php"); 
+    }else {
+        header("Location: login.php");
+    }
+}
+?>
 <body>
   <!-- NAVBAR -->
   <div class="navbar">

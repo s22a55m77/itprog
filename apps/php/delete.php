@@ -9,7 +9,24 @@
 <!-- TODO add the session guard here
           redirect to login.php if not login
 -->
+<?php
 
+    $username=$_POST['username'];
+    $password=$_POST['password'];
+
+$sql= "SELECT * FROM users WHERE username =='$username' and password =='$password'";  
+$query= mysqli_query($con, $sql); 
+
+while($User=$result->fetch_assoc()) 
+{
+    if($User['username'] == $username && $User['password'] == $password ) 
+    {
+        header("Location: admin.php"); 
+    }else {
+        header("Location: login.php");
+    }
+}
+?>
 <body>
   <!-- TODO get the whole sql statement here using POST method 
             so that we can know what to delete
