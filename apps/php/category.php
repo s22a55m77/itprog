@@ -19,11 +19,13 @@
   <div class="navbar">
     <div>
       <span>
-        <a style="color: #fff" href="main.php"> Dish Management System </a>
+        <a style="color: #fff" href="main.php"><span>Dish Management System</span></a>
       </span>
     </div>
     <div>
-      username
+        <?php
+            echo getUsername();
+        ?>
     </div>
   </div>
 
@@ -51,7 +53,7 @@
         <div class="content-header">
           <span>Category Table</span>
           <div>
-            <button>+ New</button>
+            <button><a style="color: white" href="categoryAdd.php">+ New</a></button>
             <button>
               <a href="category.php" style="color: #fff;">
                 Refresh
@@ -69,7 +71,15 @@
           <tr>
             <td>1</td>
             <td>Mains</td>
-            <td>Delete Update</td>
+            <td>
+                <form action="delete.php" method="POST">
+                    <input hidden="true" name="type" value="category" />
+                    <button type="submit" name="id" value="id">Delete</button>
+                </form>
+                <form action="categoryUpdate.php" method="POST">
+                    <button type="submit" value="id">Update</button>
+                </form>
+            </td>
           </tr>
           <tr>
             <td>2</td>
