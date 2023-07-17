@@ -13,8 +13,6 @@
 
     checkLogin();
 ?>
-
-?>
 <body>
   <!-- NAVBAR -->
   <div class="navbar">
@@ -24,7 +22,9 @@
       </span>
     </div>
     <div>
-      username
+        <?php
+            echo getUsername();
+        ?>
     </div>
   </div>
 
@@ -52,7 +52,11 @@
         <div class="content-header">
           <span>Dish Table</span>
           <div>
-            <button>+ New</button>
+            <button>
+                <a href="dishAdd.php" style="color: #fff;">
+                    + New
+                </a>
+            </button>
             <button>
               <a href="dish.php" style="color: #fff;">
                 Refresh
@@ -70,13 +74,14 @@
             <th>Price</th>
             <th>Action</th>
           </tr>
-          <!-- TODO fetch data from sql -->
+          <!-- TODO fetch data from db @Bryan -->
           <?php
-
-
-
-
-
+            $sql = "SELECT
+                        d.id, d.name, d.description, d.price, d.image,
+                        c.name AS category
+                    FROM
+                        dishes d LEFT JOIN categories c ON d.category_id=c.id
+                    ORDER BY c.name, d.id;";
           ?>
           <tr>
             <td>1</td>
