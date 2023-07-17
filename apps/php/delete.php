@@ -13,7 +13,7 @@
     require("utils.php");
 
     checkLogin();
-?>
+
 ?>
 <body>
   <!-- TODO get the whole sql statement here using POST method 
@@ -22,10 +22,12 @@
 
   <div class="navbar">
     <div>
-      <span> Dish Management System <span>
+        <a style="color: #fff" href="main.php"><span>Dish Management System</span></a>
     </div>
     <div>
-      username
+        <?php
+            echo getUsername();
+        ?>
     </div>
   </div>
 
