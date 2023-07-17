@@ -6,6 +6,28 @@
   <link rel="stylesheet" href="global.css">
 </head>
 
+<?php
+    require("utils.php");
+
+    if (isset($_POST["loginBtn"])) {
+        global $conn;
+        $user=$_POST["username"];
+        $pass=$_POST["password"];
+
+        $query = mysqli_query($conn, "SELECT username, password FROM users 
+                                           WHERE username='$user'
+                                           AND password='$pass'");
+        $fetch = mysqli_fetch_array($query);
+
+        if($user==$fetch["username"] && $pass==$fetch["password"]) {
+            session_start();
+            $_SESSION['getLogin'] = $user;
+            header("location:main.php");
+        } else {
+            header("location:login.php?error=1");
+        }
+    }
+?>
 
 <body>
   <div class="navbar">
@@ -27,17 +49,15 @@
             if(isset($_GET["error"])) {
                 $error=$_GET["error"];
                 if ($error==1) {
-                    echo "<p>Username and/or password invalid<br/></p>";
+                    echo "<div class='alert'>Username and/or password invalid<br/></div>";
                 }
             }
             ?>
           <form action="login.php" method="POST">
-            <input placeholder="username"/>
-            <input type="password" placeholder="password"/>
+            <input name="username" placeholder="username"/>
+            <input name="password" type="password" placeholder="password"/>
+              <button style="margin-top: 10px" name="loginBtn">Login</button>
           </form>
-        </div>
-        <div class="login-content">
-          <button>Login</button>
         </div>
       </div>
     </div>
