@@ -13,7 +13,6 @@
 
     checkLogin();
 ?>
-?>
 <body>
   <!-- NAVBAR -->
   <div class="navbar">
@@ -23,7 +22,9 @@
       </span>
     </div>
     <div>
-      username
+        <?php
+            echo getUsername();
+        ?>
     </div>
   </div>
 
@@ -51,7 +52,11 @@
         <div class="content-header">
           <span>Combo Table</span>
           <div>
-            <button>+ New</button>
+              <button>
+                  <a href="comboAdd.php" style="color: #fff;">
+                      + New
+                  </a>
+              </button>
             <button>
               <a href="combo.php" style="color: #fff;">
                 Refresh
@@ -67,52 +72,30 @@
             <th>Discount</th>
             <th>Action</th>
           </tr>
-          <!-- TODO fetch data from db -->
+          <!-- fetch data from db -->
            <?php
-
-             $sql = "SELECT * FROM combos"; 
+             global $conn;
+             $sql = "SELECT c.id, c.name, c.discount, 
+                    d.name as dish_name
+                    FROM combos c LEFT JOIN dishes d ON c.dish_id=d.id 
+                    ORDER BY c.name";
              $query = mysqli_query($conn, $sql); 
 
              if (mysqli_num_rows($query) > 0) {
-             while ($row = mysqli_fetch_assoc($query)) {
-             $id = $row['id'];
-             $name = $row['name'];
-             $dish_id = $row['dish_id'];
-             $discount = $row['discount'];
-            
-             echo "ID: " . $id . "<br>";
-             echo "Name: " . $name . "<br>";
-             echo "Dish: " . $dish_id . "<br>";
-             echo "Discount: " . $discount . "<br>";
-             echo "<br>";
-            } 
+                 while ($row = mysqli_fetch_assoc($query)) {
+                     echo "<tr>";
+                     echo "<td>" . $row['id'] . "</td>";
+                     echo "<td>" . $row['name'] . "</td>";
+                     echo "<td>" . $row['dish_name'] . "</td>";
+                     echo "<td>" . $row['discount'] . "</td>";
+                     echo "<td>Delete Update</td>";
+                     echo "</tr>";
+                }
             } else {
                 echo "No data found.";
             }
             mysqli_close($conn);
            ?>
-          <tr>
-            <td>1</td>
-            <td>Chicken Mash Tea Combo</td>
-            <td>Chicken</td>
-            <td>10</td>
-            <td>Delete Update</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Chicken Mash Tea Combo</td>
-            <td>Mash Potato</td>
-            <td>10</td>
-            <td>Delete Update</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Chicken Mash Tea Combo</td>
-            <td>Ice Tea</td>
-            <td>10</td>
-            <td>Delete Update</td>
-          </tr>
-          <!-- END OF TODO-->
         </table>
       </div>
     </div>
