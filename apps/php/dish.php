@@ -5,25 +5,13 @@
   <link rel="stylesheet" href="global.css">
 </head>
 
-<!-- TODO add the session guard here
+<!-- add the session guard here
           redirect to login.php if not login
 -->
 <?php
-    session_start();
-    $conn = mysqli_connect("localhost", "root", "DLSU1234!") or die ("Unable to connect!". mysqli_error());
-    mysqli_select_db($conn, "itprog.mysql.database.azure.com");
+    require("utils.php");
 
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";  
-    $query = mysqli_query($con, $sql); 
-
-    if ($query->num_rows > 0) {
-        echo("You logged in successfully");
-    } else {
-        header("Location: login.php");
-    }
+    checkLogin();
 ?>
 
 ?>
@@ -46,15 +34,15 @@
     <div class="sidebar">
       <a class="menu" href="category.php">
         Category
-      </a> 
+      </a>
       <a class="menu active" href="dish.php">
         Dish
-      </a> 
+      </a>
       <a class="menu" href="combo.php">
         Combo
-      </a> 
+      </a>
     </div>
-    
+
     <!-- BODY -->
     <div class="body">
       <div class="header">
@@ -71,7 +59,7 @@
               </a>
             </button>
           </div>
-        </div>  
+        </div>
         <table class="table">
           <tr class=table-header>
             <th>ID</th>
@@ -110,7 +98,7 @@
             <td>Sides</td>
             <td>Mash Potato</td>
             <td>Creamy and velvety mash potato, the perfect comfort food indulgence.</td>
-            <td>75</td>        
+            <td>75</td>
             <td>Delete Update</td>
           </tr>
           <tr>

@@ -5,25 +5,13 @@
   <link rel="stylesheet" href="global.css">
 </head>
 
-<!-- TODO add the session guard here
+<!-- add the session guard here
           redirect to login.php if not login
 -->
 <?php
-    session_start();
-    $conn = mysqli_connect("localhost", "root", "DLSU1234!") or die ("Unable to connect!". mysqli_error());
-    mysqli_select_db($conn, "itprog.mysql.database.azure.com");
+    require("utils.php");
 
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";  
-    $query = mysqli_query($con, $sql); 
-
-    if ($query->num_rows > 0) {
-        echo("You logged in successfully");
-    } else {
-        header("Location: login.php");
-    }
+    checkLogin();
 ?>
 
 <body>
@@ -77,7 +65,7 @@
             <th>Name</th>
             <th>Action</th>
           </tr>
-          <!-- TODO fetch data from db -->
+          <!-- TODO fetch data from db @Bryan -->
           <tr>
             <td>1</td>
             <td>Mains</td>
