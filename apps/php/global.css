@@ -53,6 +53,7 @@ a {
 .body {
   width: 100%;
   overflow-y: scroll;
+  position: relative;
 }
 
 .body .header {
@@ -83,6 +84,7 @@ a {
   height: fit-content;
   padding: 24px 24px;
   border-radius: 2px;
+  box-shadow: 5px 5px 5px rgba(0,21,41,.05);
 }
 
 .content-header {
@@ -136,6 +138,15 @@ button:focus-visible {
   background-color: #f5222d;
 }
 
+.alert {
+  padding: 2px;
+  background-color: #ff4d4f;
+  border: 1px solid #f5222d;
+  color: white;
+  text-align: center;
+  border-radius: 2px;
+  font-size: 14px;
+}
 
 .navbar {
   font-size: 14px;
@@ -223,6 +234,7 @@ img {
   height: auto;
   background-color: white;
   border-radius: 10px;
+  box-shadow: 5px 5px 5px rgba(0,21,41,.05);
 }
 
 .login-header {
@@ -239,7 +251,7 @@ img {
   display: block;
   margin-top: 10px;
   height: 30px;
-  width: 90%;
+  width: 100%;
   border: 0.5px solid rgba(184, 184, 184, 0.911);
   border-radius: 2px;
   padding: 10px;
@@ -247,4 +259,48 @@ img {
 
 .login-container input:focus {
   outline: solid #0958d9;
+}
+
+.add-container {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 30%;
+  height: auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px rgba(0,21,41,.05);
+}
+
+.add-header {
+  padding: 24px;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.add-content {
+  padding: 24px;
+}
+
+.add-container .input {
+  display: block;
+  margin-top: 10px;
+  height: 30px;
+  width: 100%;
+  max-width: 100%;
+  border: 0.5px solid rgba(184, 184, 184, 0.911);
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.add-container .input:focus {
+  outline: solid #0958d9;
+}
+
+.required::after {
+  content: "*";
+  color: red;
 }
