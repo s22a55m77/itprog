@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Menu xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="menu.xsd">
+    <!-- Adding for existing category  -->
+    <Category name="Mains" exist="true">
+        <!-- min 0 max unbounded  -->
+        <Dish>
+            <name>Salad</name>
+            <!--  optional -->
+            <description>Salad Description</description>
+            <!--  min 0 -->
+            <price>100</price>
+            <!--  optional -->
+            <image>base64 string</image>
+        </Dish>
+    </Category>
+
+    <!-- Adding for new category  -->
+    <Category name="Mains" exist="false">
+        <!-- min 0 max unbounded  -->
+        <Dish>
+            <name>Salad</name>
+            <!--  min 0 -->
+            <price>100</price>
+            <!--  optional -->
+            <image>base64 string</image>
+        </Dish>
+        <Dish>
+            <name>Pizza</name>
+            <!--  optional -->
+            <description>Pizza Description</description>
+            <!--  min 0 -->
+            <price>150</price>
+        </Dish>
+    </Category>
+</Menu>
