@@ -54,7 +54,7 @@ checkLogin();
             <div class="add-content">
                 <form action="" method="POST" id="addForm">
                     <div class="required">Combo Name</div>
-                    <input class="input" name="name" />
+                    <input class="input" name="name" required/>
                     <br />
                     <div class="required">Category Name</div>
                     <select class="input" style="height: auto" name="category_id">
@@ -71,12 +71,12 @@ checkLogin();
                     </select>
                     <br />
                     <div class="required">Price</div>
-                    <input class="input" type="number" name="price" />
+                    <input class="input" type="number" name="price" required/>
                     <br />
-                    <div class="required">Description</div>
-                    <textarea class="input" name="description"></textarea>
+                    <div>Description</div>
+                    <textarea class="input" name="description" ></textarea>
                     <br />
-                    <div class="required">Image</div>
+                    <div>Image</div>
                     <input class="input" style="height: auto" type="file" accept="image/png, image/jpeg"/>
                 </form>
             </div>
