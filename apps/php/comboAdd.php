@@ -51,15 +51,15 @@ checkLogin();
             <div class="add-content">
                 <form action="" method="POST" id="addForm">
                     <div class="required">Combo Name</div>
-                    <input class="input" name="name" />
+                    <input class="input" name="name" required/>
                     <br />
                     <div class="required">Dish Name</div>
-                    <input class="input" name="dish1" />
-                    <input class="input" name="dish2" />
-                    <input class="input" name="dish2" />
+                    <input class="input" name="dish1" required/>
+                    <input class="input" name="dish2" required/>
+                    <input class="input" name="dish2" required/>
                     <br />
                     <div class="required">Discount</div>
-                    <input class="input" type="number" name="discount" />
+                    <input class="input" type="number" name="discount" required/>
                 </form>
             </div>
             <div class="add-content">
