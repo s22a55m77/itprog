@@ -1,4 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <!-- TODO @Jerome   -->
+    <xsd:element name="Summary">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="date" type="xs:date"/>
+        <xsd:element name="amount" type="xs:nonNegativeInteger"/>
+        <xsd:element name="discount" type="xs:nonNegativeInteger"/>
+        <xsd:element name="Dishes">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="total" type="xs:nonNegativeInteger"/>
+              <xsd:element name="Dish" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="name" type="xs:string"/>
+                    <xsd:element name="sold" type="xs:nonNegativeInteger"/>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+</xsd:schema>
+
 </xsd:schema>
