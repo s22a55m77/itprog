@@ -23,6 +23,19 @@
     <div>
         <?php
             echo getUsername();
+
+          if(isset($_POST["submitBtn"])) {
+            global $conn;
+            $name = $_POST["name"];
+            $sql = "INSERT INTO categories(name) VALUES ('$name') ";
+            $query = mysqli_query($conn, $sql);
+
+            if(mysqli_affected_rows($conn) >= 1) {
+              header("location:category.php");
+            } else {
+              header("location:categoryAdd.php?error=1");
+            }
+          }
         ?>
     </div>
 </div>
@@ -47,16 +60,24 @@
             <div class="add-header">
                 Add Category
             </div>
-            <!-- TODO add function @Bryan -->
+            <!-- add function -->
+            <?php
+            if(isset($_GET["error"])) {
+              $error=$_GET["error"];
+              if ($error==1) {
+                echo "<div class='alert'>Add Failed<br/></div>";
+              }
+            }
+            ?>
             <div class="add-content">
                 <form action="" method="POST" id="addForm">
                     <div class="required">Category Name</div>
-                    <input class="input" name="name" />
+                    <input class="input" name="name" required/>
                 </form>
             </div>
             <div class="add-content">
                 <button class="error"><a href="javascript:history.back()" style="color: #fff">Cancel</a></button>
-                <button form="addForm">Submit</button>
+                <button form="addForm" name="submitBtn">Submit</button>
             </div>
         </div>
     </div>

@@ -22,9 +22,21 @@ checkLogin();
     </div>
     <div>
         <?php
-        echo $_POST["type"];
-        echo $_POST["id"];
-        echo getUsername();
+            global $conn;
+            echo getUsername();
+
+            if(isset($_POST["submitBtn"])) {
+                $name = $_POST["name"];
+                $id = $_POST["id"];
+                $sql = "UPDATE categories SET name='$name' WHERE id = $id";
+                $query = mysqli_query($conn, $sql);
+
+                if(mysqli_affected_rows($conn) >= 1) {
+                    header("location:category.php");
+                } else {
+                    header("location:categoryUpdate.php?error=1");
+                }
+            }
         ?>
     </div>
 </div>
@@ -49,17 +61,32 @@ checkLogin();
             <div class="add-header">
                 Add Category
             </div>
-            <!-- TODO update function -->
+            <?php
+            if(isset($_GET["error"])) {
+              $error=$_GET["error"];
+              if ($error==1) {
+                echo "<div class='alert'>Update Failed<br/></div>";
+              }
+            }
+            ?>
+            <!-- update function -->
             <div class="add-content">
-                <form action="" method="POST" id="addForm">
+                <form action="categoryUpdate.php" method="POST" id="updateForm">
                     <div class="required">Category Name</div>
                         <!--       Get Data from database            -->
-                    <input class="input" name="name" value="Test" />
+                    <?php
+                        $id = $_POST["id"];
+                        $sql = "SELECT * FROM categories WHERE id = $id";
+                        $query = mysqli_query($conn, $sql);
+                        $result = mysqli_fetch_object($query);
+                        echo "<input hidden name=\"id\" value=".$id." />";
+                        echo "<input class=\"input\" name=\"name\" value=".$result->name." />"
+                    ?>
                 </form>
             </div>
             <div class="add-content">
                 <button class="error"><a href="javascript:history.back()" style="color: #fff">Cancel</a></button>
-                <button form="addForm">Submit</button>
+                <button form="updateForm" name="submitBtn">Submit</button>
             </div>
         </div>
     </div>
