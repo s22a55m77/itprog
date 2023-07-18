@@ -304,3 +304,55 @@ img {
   content: "*";
   color: red;
 }
+
+.main-container {
+  margin-top: 50px;
+  margin-left: 15px;
+  display: flex;
+  justify-content: space-evenly;
+  flex: 2;
+  gap: 12px;
+}
+
+.card {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 5px 5px 5px rgba(0,21,41,.05);  width: 300px;
+  width: 100%;
+  min-height: 150px;
+  height: auto;
+}
+
+.card-header {
+  padding: 10px;
+  font-weight: bold;
+}
+
+.card-header::after {
+  content: "";
+  display: block;
+  position: absolute;
+  margin-top: 3px;
+  left: 0;
+  width: 100%;
+  border-top: 1px solid rgba(5, 5, 5, 0.06);
+}
+
+.card-content {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  border-bottom: 5px solid #0958d9;
+}
+
+.card-content:hover {
+  transform: translate(-50%, -60%);
+  transition: 100ms;
+}
