@@ -88,7 +88,15 @@
                      echo "<td>" . $row['name'] . "</td>";
                      echo "<td>" . $row['dish_name'] . "</td>";
                      echo "<td>" . $row['discount'] . "</td>";
-                     echo "<td>Delete Update</td>";
+                     echo "<td  style='display: flex; justify-content: center; gap: 10px'>
+                                <form action='delete.php' method='POST'>
+                                  <input hidden='true' name='type' value='combo' />
+                                  <button type='submit' name='id' value=".$row['id'].">Delete</button>
+                                </form>
+                                <form action='comboUpdate.php' method='POST'>
+                                  <button type='submit' name='id' value=".$row['id'].">Update</button>
+                                </form>
+                            </td>";
                      echo "</tr>";
                 }
             } else {

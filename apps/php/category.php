@@ -71,25 +71,47 @@
           <tr>
             <td>1</td>
             <td>Mains</td>
-            <td>
+            <td style="display: flex; justify-content: center; gap: 10px">
                 <form action="delete.php" method="POST">
                     <input hidden="true" name="type" value="category" />
+                    <!-- change the value to the id of the category                   -->
                     <button type="submit" name="id" value="id">Delete</button>
                 </form>
                 <form action="categoryUpdate.php" method="POST">
-                    <button type="submit" value="id">Update</button>
+                    <!-- same here                   -->
+                    <button type="submit" name="id" value="1">Update</button>
                 </form>
             </td>
           </tr>
           <tr>
             <td>2</td>
             <td>Sides</td>
-            <td>Delete Update</td>
+              <td style="display: flex; justify-content: center; gap: 10px">
+                  <form action="delete.php" method="POST">
+                      <input hidden="true" name="type" value="category" />
+                      <!-- change the value to the id of the category                   -->
+                      <button type="submit" name="id" value="id">Delete</button>
+                  </form>
+                  <form action="categoryUpdate.php" method="POST">
+                      <!-- same here                   -->
+                      <button type="submit" name="id" value="id">Update</button>
+                  </form>
+              </td>
           </tr>
           <tr>
             <td>3</td>
             <td>Drink</td>
-            <td>Delete Update</td>
+              <td style="display: flex; justify-content: center; gap: 10px">
+                  <form action="delete.php" method="POST">
+                      <input hidden="true" name="type" value="category" />
+                      <!-- change the value to the id of the category                   -->
+                      <button type="submit" name="id" value="id">Delete</button>
+                  </form>
+                  <form action="categoryUpdate.php" method="POST">
+                      <!-- same here                   -->
+                      <button type="submit" name="id" value="id">Update</button>
+                  </form>
+              </td>
           </tr>
           <!-- END OF TODO-->
         </table>

@@ -93,7 +93,17 @@
             <td>Chicken</td>
             <td>Tender, succulent chicken infused with aromatic flavors.</td>
             <td>300</td>
-            <td>Delete Update</td>
+            <td style="display: flex; justify-content: center; gap: 10px">
+              <form action="delete.php" method="POST">
+                  <input hidden="true" name="type" value="dish" />
+                  <!-- change the value to the id of the dish                   -->
+                  <button type="submit" name="id" value="id">Delete</button>
+              </form>
+              <form action="dishUpdate.php" method="POST">
+                  <!-- same here                   -->
+                  <button type="submit" name="id" value="id">Update</button>
+              </form>
+            </td>
           </tr>
           <tr>
             <td>2</td>
@@ -104,7 +114,17 @@
             <td>Mash Potato</td>
             <td>Creamy and velvety mash potato, the perfect comfort food indulgence.</td>
             <td>75</td>
-            <td>Delete Update</td>
+            <td style="display: flex; justify-content: center; gap: 10px">
+              <form action="delete.php" method="POST">
+                  <input hidden="true" name="type" value="dish" />
+                  <!-- change the value to the id of the dish                   -->
+                  <button type="submit" name="id" value="id">Delete</button>
+              </form>
+              <form action="dishUpdate.php" method="POST">
+                  <!-- same here                   -->
+                  <button type="submit" name="id" value="id">Update</button>
+              </form>
+            </td>
           </tr>
           <tr>
             <td>3</td>
@@ -115,7 +135,17 @@
             <td>Ice Tea</td>
             <td>A cool and refreshing beverage that quenches your thirst.</td>
             <td>55</td>
-            <td>Delete Update</td>
+            <td style="display: flex; justify-content: center; gap: 10px">
+              <form action="delete.php" method="POST">
+                  <input hidden="true" name="type" value="dish" />
+                  <!-- change the value to the id of the dish                   -->
+                  <button type="submit" name="id" value="id">Delete</button>
+              </form>
+              <form action="dishUpdate.php" method="POST">
+                  <!-- same here                   -->
+                  <button type="submit" name="id" value="id">Update</button>
+              </form>
+            </td>
           </tr>
           <!-- END OF TODO-->
         </table>
