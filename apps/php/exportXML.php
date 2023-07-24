@@ -68,9 +68,9 @@
         $dish->addChild('sold',$row['total_sold'] );
       }
     }
-    file_put_contents('test.xml', $xml->asXML());
+    file_put_contents('Summary.xml', $xml->asXML());
 
-    $file_name = 'test.xml';
+    $file_name = 'Summary.xml';
     $file_path = __DIR__ . '/' . $file_name;
     header('Content-Description: File Transfer');
     header('Content-Type: application/xml');
