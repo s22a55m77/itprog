@@ -7,19 +7,19 @@
         <xsd:element name="Category" maxOccurs="unbounded">
           <xsd:complexType>
             <xsd:sequence>
-              <xsd:element name="Dish" maxOccurs="unbounded">
+              <xsd:element name="Dish" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                   <xsd:sequence>
-                    <xsd:element name="name" type="xs:string"/>
-                    <xsd:element name="description" type="xs:string" minOccurs="0"/>
-                    <xsd:element name="price" type="xs:nonNegativeInteger"/>
-                    <xsd:element name="image" type="xs:string" minOccurs="0"/>
+                    <xsd:element name="name" type="xsd:string"/>
+                    <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="price" type="xsd:nonNegativeInteger"/>
+                    <xsd:element name="image" type="xsd:string" minOccurs="0"/>
                   </xsd:sequence>
                 </xsd:complexType>
               </xsd:element>
             </xsd:sequence>
-            <xsd:attribute name="name" type="xs:string"/>
-            <xsd:attribute name="exist" type="xs:boolean"/>
+            <xsd:attribute name="name" type="xsd:string"/>
+            <xsd:attribute name="exist" type="xsd:boolean"/>
           </xsd:complexType>
         </xsd:element>
       </xsd:sequence>

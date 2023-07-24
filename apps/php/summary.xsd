@@ -4,18 +4,30 @@
     <xsd:element name="Summary">
     <xsd:complexType>
       <xsd:sequence>
-        <xsd:element name="date" type="xs:date"/>
-        <xsd:element name="amount" type="xs:nonNegativeInteger"/>
-        <xsd:element name="discount" type="xs:nonNegativeInteger"/>
+        <xsd:element name="date" type="xsd:date"/>
+        <xsd:element name="amount">
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:decimal">
+              <xsd:minInclusive value="0" />
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:element>
+        <xsd:element name="discount">
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:decimal">
+              <xsd:minInclusive value="0" />
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:element>
         <xsd:element name="Dishes">
           <xsd:complexType>
             <xsd:sequence>
-              <xsd:element name="total" type="xs:nonNegativeInteger"/>
-              <xsd:element name="Dish" maxOccurs="unbounded">
+              <xsd:element name="total" type="xsd:nonNegativeInteger"/>
+              <xsd:element name="Dish" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                   <xsd:sequence>
-                    <xsd:element name="name" type="xs:string"/>
-                    <xsd:element name="sold" type="xs:nonNegativeInteger"/>
+                    <xsd:element name="name" type="xsd:string"/>
+                    <xsd:element name="sold" type="xsd:nonNegativeInteger"/>
                   </xsd:sequence>
                 </xsd:complexType>
               </xsd:element>
@@ -25,7 +37,5 @@
       </xsd:sequence>
     </xsd:complexType>
   </xsd:element>
-
-</xsd:schema>
 
 </xsd:schema>
