@@ -17,13 +17,27 @@
 <body>
 
   <div class="navbar">
+    <?php
+      if(isset($_POST['logout'])) {
+        session_start();
+        session_destroy();
+        header("location:login.php");
+      }
+    ?>
     <div>
         <a style="color: #fff" href="main.php"><span>Dish Management System</span></a>
     </div>
-    <div>
+    <div class="username">
+      <div>
         <?php
-            echo getUsername();
+          echo getUsername();
         ?>
+      </div>
+      <div class="dropdown">
+          <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+              <button class="error" name="logout">Logout</button>
+          </form>
+      </div>
     </div>
   </div>
 
@@ -49,42 +63,83 @@
         </div>
           <!-- information of the deleted item -->
         <div class="delete-content">
+            <table class="table">
             <?php
                 global $conn;
                 $id = $_POST["id"];
+                $type = $_POST["type"];
 
-                if ($_POST["type"] == "category") {
+                if ($type == "category") {
                     $sql = "SELECT * FROM categories WHERE id = $id";
                     $query = mysqli_query($conn, $sql);
                     $result = mysqli_fetch_object($query);
 
-                    echo "ID: ".$result->id." Name: ".$result->name;
+                    echo "<tr class=table-header>";
+                    echo "<th>ID</th>";
+                    echo "<th>Name</th>";
+                    echo "</tr>";
+                    echo "<tr>";
+                    echo "<th>".$result->id."</th><th>".$result->name."</th>";
                 }
 
-                if ($_POST["type"] == "dish") {
+                if ($type == "dish") {
                     $sql = "SELECT * FROM dishes WHERE id = $id";
                     $query = mysqli_query($conn, $sql);
                     $result = mysqli_fetch_object($query);
 
-                    echo "ID: ".$result->id." Name: ".$result->name;
+                    echo "<tr class=table-header>";
+                    echo "<th>ID</th>";
+                    echo "<th>Name</th>";
+                    echo "</tr>";
+                    echo "<tr>";
+                    echo "<th>".$result->id."</th><th>".$result->name."</th>";
                 }
 
-                if ($_POST["type"] == "combo") {
+                if ($type == "combo") {
                     $sql = "SELECT c.id AS id, c.name AS name, d.name AS dish 
                             FROM combos c LEFT JOIN dishes d ON c.dish_id=d.id
                             WHERE c.id = $id";
                     $query = mysqli_query($conn, $sql);
                     $result = mysqli_fetch_object($query);
 
-                    echo "ID: ".$result->id." Name: ".$result->name." Dish: ".$result->dish;
+                  echo "<tr class=table-header>";
+                  echo "<th>ID</th>";
+                  echo "<th>Name</th>";
+                  echo "<th>Dish</th>";
+                  echo "</tr>";
+                  echo "<tr>";
+                  echo "<th>".$result->id."</th><th>".$result->name."</th><th>".$result->dish."</th>";
                 }
 
+              if ($type == "comboItem") {
+                $sql = "SELECT c.id AS id, c.name AS name, d.name AS dish 
+                            FROM combos c LEFT JOIN dishes d ON c.dish_id=d.id
+                            WHERE d.id = $id";
+                $query = mysqli_query($conn, $sql);
+                $result = mysqli_fetch_object($query);
+
+                echo "<tr class=table-header>";
+                echo "<th>ID</th>";
+                echo "<th>Combo Name</th>";
+                echo "<th>Dish</th>";
+                echo "</tr>";
+                echo "<tr>";
+                echo "<th>".$result->id."</th><th>".$result->name."</th><th>".$result->dish."</th>";
+              }
+
             ?>
+                </tr>
+            </table>
         </div>
         <div class="delete-content">
-          <button class="error"><a href="javascript:history.back()" style="color: #fff">Cancel</a></button>
-            <!-- TODO wait for the lesson from networking, use ajax to POST confirm.php to delete    -->
-          <button>Confirm</button>
+            <form action="confirm.php" method="POST" id="deleteForm">
+                <?php
+                    echo "<input hidden='true' name='type' value='$type' />";
+                    echo "<input hidden='true' name='id' value='$id'/>";
+                ?>
+            </form>
+          <button class="error"><a href="<?php if ($type == "comboItem") echo "combo.php"; else echo "javascript:history.back()"; ?>" style="color: #fff">Cancel</a></button>
+          <button type="submit" form="deleteForm">Confirm</button>
         </div>
       </div>
     </div>
