@@ -1,0 +1,34 @@
+name: Build and Push PHP Docker Image to Azure
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/php/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'apps/php/**'
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to Azure Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: itprog.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build and Push
+        working-directory: ./apps/php
+        run: |
+          docker build . -t itprog.azurecr.io/php:latest
+          docker push itprog.azurecr.io/php:latest
