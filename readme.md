@@ -15,6 +15,7 @@ front = http://localhost:3000/
 backend = https://itprog-back.azurewebsites.net/ \
 backend documentation = https://itprog-back.azurewebsites.net/documentation/ \
 front = https://itprog-front.azurewebsites.net/
+phase2 = https://itprog-phase2.azurewebsites.net/
 
 # Naming Convention
 ## SQL
