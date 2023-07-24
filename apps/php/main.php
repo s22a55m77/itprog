@@ -13,17 +13,30 @@
 
     checkLogin();
 ?>
-
 <body>
   <!-- NAVBAR -->
   <div class="navbar">
+      <?php
+        if(isset($_POST['logout'])) {
+          session_start();
+          session_destroy();
+          header("location:login.php");
+        }
+      ?>
     <div>
       <span> Dish Management System <span>
     </div>
-    <div>
-        <?php
-            echo getUsername();
-        ?>
+    <div class="username">
+        <div>
+            <?php
+              echo getUsername();
+            ?>
+        </div>
+        <div class="dropdown">
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                <button class="error" name="logout">Logout</button>
+            </form>
+        </div>
     </div>
   </div>
 
@@ -185,6 +198,11 @@
 
              * */
         ?>
+        <div style="margin-top: 10px; margin-left: 15px;">
+            <form action="exportXML.php" method="POST">
+                <button name="XMLBtn"> Export Summary as XML </button>
+            </form>
+        </div>
     </div>
   </div>
 </body>
