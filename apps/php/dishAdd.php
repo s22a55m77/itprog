@@ -15,20 +15,60 @@ require("utils.php");
 checkLogin();
 ?>
 <body>
-<!-- TODO get the whole sql statement here using POST method
-          so that we can know what to delete
--->
-
 <div class="navbar">
+      <?php
+        if(isset($_POST['logout'])) {
+          session_start();
+          session_destroy();
+          header("location:login.php");
+        }
+      ?>
     <div>
         <a style="color: #fff" href="main.php"><span>Dish Management System</span></a>
     </div>
-    <div>
-        <?php
-        echo getUsername();
-        ?>
+    <div class="username">
+        <div>
+          <?php
+            echo getUsername();
+          ?>
+        </div>
+        <div class="dropdown">
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                <button class="error" name="logout">Logout</button>
+            </form>
+        </div>
     </div>
 </div>
+
+<?php
+  if(isset($_POST["submitBtn"])) {
+    global $conn;
+    $categoryId = $_POST["category_id"];
+    $name = $_POST["name"];
+    $description = isset($_POST["description"]) ? $_POST["description"] : null;
+    $price = $_POST["price"];
+    $image = isset($_FILES["image"]) ? $_FILES["image"]["tmp_name"] : null;
+    if (isset($_FILES["image"])) {
+      // Get the original name of the uploaded file
+      $original_name = $_FILES["image"]["name"];
+
+      // Get the file extension from the original name using pathinfo
+      $file_extension = pathinfo($original_name, PATHINFO_EXTENSION);
+
+      $image = 'data:image/'.$file_extension.';base64,' . base64_encode(file_get_contents($image));
+
+    }
+    $sql = "INSERT INTO dishes(category_id, name, description, price, image) 
+                    VALUES ('$categoryId', '$name', '$description', '$price', '$image');";
+    $query = mysqli_query($conn, $sql);
+
+    if(mysqli_affected_rows($conn) >= 1) {
+      header("location:dish.php");
+    } else {
+      header("location:dishAdd.php?error=1");
+    }
+  }
+?>
 
 <!-- CONTAINER -->
 <div class="container">
@@ -48,14 +88,11 @@ checkLogin();
     <div class="body">
         <div class="add-container">
             <div class="add-header">
-                Add Combo
+                Add Dish
             </div>
-            <!-- TODO add function  -->
+            <!-- add function  -->
             <div class="add-content">
-                <form action="" method="POST" id="addForm">
-                    <div class="required">Combo Name</div>
-                    <input class="input" name="name" required/>
-                    <br />
+                <form action="dishAdd.php" method="POST" id="addForm" enctype="multipart/form-data">
                     <div class="required">Category Name</div>
                     <select class="input" style="height: auto" name="category_id">
                         <?php
@@ -70,6 +107,9 @@ checkLogin();
                         ?>
                     </select>
                     <br />
+                    <div class="required">Name</div>
+                    <input class="input" type="text" name="name" required/>
+                    <br />
                     <div class="required">Price</div>
                     <input class="input" type="number" name="price" required/>
                     <br />
@@ -77,12 +117,12 @@ checkLogin();
                     <textarea class="input" name="description" ></textarea>
                     <br />
                     <div>Image</div>
-                    <input class="input" style="height: auto" type="file" accept="image/png, image/jpeg"/>
+                    <input class="input" name="image" style="height: auto" type="file" accept="image/png, image/jpeg"/>
                 </form>
             </div>
             <div class="add-content">
                 <button class="error"><a href="javascript:history.back()" style="color: #fff">Cancel</a></button>
-                <button form="addForm">Submit</button>
+                <button form="addForm" name="submitBtn">Submit</button>
             </div>
         </div>
     </div>

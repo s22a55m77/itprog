@@ -16,16 +16,28 @@
 <body>
   <!-- NAVBAR -->
   <div class="navbar">
-    <div>
-      <span>
-        <a style="color: #fff" href="main.php"> Dish Management System </a>
-      </span>
-    </div>
-    <div>
-        <?php
-            echo getUsername();
-        ?>
-    </div>
+    <?php
+      if(isset($_POST['logout'])) {
+        session_start();
+        session_destroy();
+        header("location:login.php");
+      }
+    ?>
+      <div>
+          <a style="color: #fff" href="main.php"><span>Dish Management System</span></a>
+      </div>
+      <div class="username">
+          <div>
+            <?php
+              echo getUsername();
+            ?>
+          </div>
+          <div class="dropdown">
+              <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                  <button class="error" name="logout">Logout</button>
+              </form>
+          </div>
+      </div>
   </div>
 
   <!-- CONTAINER -->
@@ -52,6 +64,11 @@
         <div class="content-header">
           <span>Dish Table</span>
           <div>
+            <button>
+              <a href="dishAddXML.php" style="color: #fff;">
+                  + Upload XML
+              </a>
+            </button>
             <button>
                 <a href="dishAdd.php" style="color: #fff;">
                     + New
@@ -97,11 +114,11 @@
               <form action="delete.php" method="POST">
                   <input hidden="true" name="type" value="dish" />
                   <!-- change the value to the id of the dish                   -->
-                  <button type="submit" name="id" value="id">Delete</button>
+                  <button type="submit" name="id" value="1">Delete</button>
               </form>
               <form action="dishUpdate.php" method="POST">
                   <!-- same here                   -->
-                  <button type="submit" name="id" value="id">Update</button>
+                  <button type="submit" name="id" value="1">Update</button>
               </form>
             </td>
           </tr>
@@ -118,11 +135,11 @@
               <form action="delete.php" method="POST">
                   <input hidden="true" name="type" value="dish" />
                   <!-- change the value to the id of the dish                   -->
-                  <button type="submit" name="id" value="id">Delete</button>
+                  <button type="submit" name="id" value="2">Delete</button>
               </form>
               <form action="dishUpdate.php" method="POST">
                   <!-- same here                   -->
-                  <button type="submit" name="id" value="id">Update</button>
+                  <button type="submit" name="id" value="2">Update</button>
               </form>
             </td>
           </tr>
@@ -139,14 +156,35 @@
               <form action="delete.php" method="POST">
                   <input hidden="true" name="type" value="dish" />
                   <!-- change the value to the id of the dish                   -->
-                  <button type="submit" name="id" value="id">Delete</button>
+                  <button type="submit" name="id" value="3">Delete</button>
               </form>
               <form action="dishUpdate.php" method="POST">
                   <!-- same here                   -->
-                  <button type="submit" name="id" value="id">Update</button>
+                  <button type="submit" name="id" value="3">Update</button>
               </form>
             </td>
           </tr>
+            <tr>
+                <td>20</td>
+                <td>
+                    <img />
+                </td>
+                <td>Drink</td>
+                <td>Ice Tea</td>
+                <td>A cool and refreshing beverage that quenches your thirst.</td>
+                <td>55</td>
+                <td style="display: flex; justify-content: center; gap: 10px">
+                    <form action="delete.php" method="POST">
+                        <input hidden="true" name="type" value="dish" />
+                        <!-- change the value to the id of the dish                   -->
+                        <button type="submit" name="id" value="20">Delete</button>
+                    </form>
+                    <form action="dishUpdate.php" method="POST">
+                        <!-- same here                   -->
+                        <button type="submit" name="id" value="20">Update</button>
+                    </form>
+                </td>
+            </tr>
           <!-- END OF TODO-->
         </table>
       </div>
