@@ -1,3 +1,26 @@
+<?php
+require("utils.php");
+
+if (isset($_POST["loginBtn"])) {
+    global $conn;
+    $user=$_POST["username"];
+    $pass=$_POST["password"];
+
+    $query = mysqli_query($conn, "SELECT username, password FROM users 
+                                           WHERE username='$user'
+                                           AND password='$pass'");
+    $fetch = mysqli_fetch_array($query);
+
+    if($user==$fetch["username"] && $pass==$fetch["password"]) {
+        session_start();
+        $_SESSION['getLogin'] = $user;
+        header("location:index.php");
+    } else {
+        header("location:login.php?error=1");
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang='en'>
 
@@ -5,29 +28,6 @@
   <title>Dish Management</title>
   <link rel="stylesheet" href="global.css">
 </head>
-
-<?php
-    require("utils.php");
-
-    if (isset($_POST["loginBtn"])) {
-        global $conn;
-        $user=$_POST["username"];
-        $pass=$_POST["password"];
-
-        $query = mysqli_query($conn, "SELECT username, password FROM users 
-                                           WHERE username='$user'
-                                           AND password='$pass'");
-        $fetch = mysqli_fetch_array($query);
-
-        if($user==$fetch["username"] && $pass==$fetch["password"]) {
-            session_start();
-            $_SESSION['getLogin'] = $user;
-            header("location:main.php");
-        } else {
-            header("location:login.php?error=1");
-        }
-    }
-?>
 
 <body>
   <div class="navbar">

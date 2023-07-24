@@ -1,3 +1,8 @@
+<?php
+require("utils.php");
+
+checkLogin();
+?>
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -5,14 +10,7 @@
   <link rel="stylesheet" href="global.css">
 </head>
 
-<!-- add the session guard here
-          redirect to login.php if not login
--->
-<?php
-  require("utils.php");
 
-  checkLogin();
-?>
 <?php
   if(isset($_POST['file'])) {
     $xml = new DOMDocument();
@@ -90,15 +88,8 @@
 <body>
 <!-- NAVBAR -->
 <div class="navbar">
-  <?php
-    if(isset($_POST['logout'])) {
-      session_start();
-      session_destroy();
-      header("location:login.php");
-    }
-  ?>
   <div>
-    <a style="color: #fff" href="main.php"><span>Dish Management System</span></a>
+    <a style="color: #fff" href="index.php"><span>Dish Management System</span></a>
   </div>
   <div class="username">
     <div>
@@ -107,9 +98,11 @@
       ?>
     </div>
     <div class="dropdown">
-      <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-        <button class="error" name="logout">Logout</button>
-      </form>
+      <button class="error" name="logout">
+        <a href='logout.php' style='color: white'>
+          Logout
+        </a>
+      </button>
     </div>
   </div>
 </div>

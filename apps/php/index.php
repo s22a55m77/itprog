@@ -1,3 +1,8 @@
+<?php
+require("utils.php");
+
+checkLogin();
+?>
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -5,24 +10,9 @@
   <link rel="stylesheet" href="global.css">
 </head>
 
-<!-- TODO add the session guard here
-          redirect to login.php if not login
--->
-<?php
-    require("utils.php");
-
-    checkLogin();
-?>
 <body>
   <!-- NAVBAR -->
   <div class="navbar">
-      <?php
-        if(isset($_POST['logout'])) {
-          session_start();
-          session_destroy();
-          header("location:login.php");
-        }
-      ?>
     <div>
       <span> Dish Management System <span>
     </div>
@@ -33,9 +23,11 @@
             ?>
         </div>
         <div class="dropdown">
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-                <button class="error" name="logout">Logout</button>
-            </form>
+          <button class="error" name="logout">
+            <a href='logout.php' style='color: white'>
+              Logout
+            </a>
+          </button>
         </div>
     </div>
   </div>
