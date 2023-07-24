@@ -148,6 +148,16 @@ button:focus-visible {
   font-size: 14px;
 }
 
+.success {
+  padding: 2px;
+  background-color: #52c41a;
+  border: 1px solid #389e0d;
+  color: white;
+  text-align: center;
+  border-radius: 2px;
+  font-size: 14px;
+}
+
 .navbar {
   font-size: 14px;
   color: rgba(255, 255, 255);
@@ -355,4 +365,21 @@ img {
 .card-content:hover {
   transform: translate(-50%, -60%);
   transition: 100ms;
+}
+
+.username {
+  position: relative;
+  display: inline-block;
+  margin-right: 30px;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  transform: translate(-25%, 0%);
+}
+
+.username:hover .dropdown {
+  display: block;
 }
