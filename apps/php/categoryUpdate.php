@@ -17,29 +17,46 @@ checkLogin();
 <body>
 
 <div class="navbar">
+      <?php
+        if(isset($_POST['logout'])) {
+          session_start();
+          session_destroy();
+          header("location:login.php");
+        }
+      ?>
     <div>
         <a style="color: #fff" href="main.php"><span>Dish Management System</span></a>
     </div>
-    <div>
-        <?php
-            global $conn;
+    <div class="username">
+        <div>
+          <?php
             echo getUsername();
-
-            if(isset($_POST["submitBtn"])) {
-                $name = $_POST["name"];
-                $id = $_POST["id"];
-                $sql = "UPDATE categories SET name='$name' WHERE id = $id";
-                $query = mysqli_query($conn, $sql);
-
-                if(mysqli_affected_rows($conn) >= 1) {
-                    header("location:category.php");
-                } else {
-                    header("location:categoryUpdate.php?error=1");
-                }
-            }
-        ?>
+          ?>
+        </div>
+        <div class="dropdown">
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                <button class="error" name="logout">Logout</button>
+            </form>
+        </div>
     </div>
 </div>
+
+<?php
+  if(isset($_POST["submitBtn"])) {
+    global $conn;
+    $name = $_POST["name"];
+    $id = $_POST["id"];
+    $sql = "UPDATE categories SET name='$name' WHERE id = $id";
+    $query = mysqli_query($conn, $sql);
+
+    if(mysqli_affected_rows($conn) >= 1) {
+      header("location:category.php");
+    } else {
+      $_SESSION["id"] = $id;
+      header("location:categoryUpdate.php?error=1");
+    }
+  }
+?>
 
 <!-- CONTAINER -->
 <div class="container">
@@ -62,12 +79,19 @@ checkLogin();
                 Add Category
             </div>
             <?php
-            if(isset($_GET["error"])) {
-              $error=$_GET["error"];
-              if ($error==1) {
-                echo "<div class='alert'>Update Failed<br/></div>";
+              if (isset($_POST["id"])) {
+                $id = $_POST["id"];
+              } else {
+                $id = $_SESSION["id"];
+                unset($_SESSION["id"]);
               }
-            }
+
+                if(isset($_GET["error"])) {
+                  $error=$_GET["error"];
+                  if ($error==1) {
+                    echo "<div class='alert'>Update Failed<br/></div>";
+                  }
+                }
             ?>
             <!-- update function -->
             <div class="add-content">
@@ -75,7 +99,6 @@ checkLogin();
                     <div class="required">Category Name</div>
                         <!--       Get Data from database            -->
                     <?php
-                        $id = $_POST["id"];
                         $sql = "SELECT * FROM categories WHERE id = $id";
                         $query = mysqli_query($conn, $sql);
                         $result = mysqli_fetch_object($query);

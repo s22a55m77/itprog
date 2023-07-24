@@ -17,28 +17,44 @@
 <body>
 
 <div class="navbar">
+      <?php
+        if(isset($_POST['logout'])) {
+          session_start();
+          session_destroy();
+          header("location:login.php");
+        }
+      ?>
     <div>
         <a style="color: #fff" href="main.php"><span>Dish Management System</span></a>
     </div>
-    <div>
-        <?php
+    <div class="username">
+        <div>
+          <?php
             echo getUsername();
-
-          if(isset($_POST["submitBtn"])) {
-            global $conn;
-            $name = $_POST["name"];
-            $sql = "INSERT INTO categories(name) VALUES ('$name') ";
-            $query = mysqli_query($conn, $sql);
-
-            if(mysqli_affected_rows($conn) >= 1) {
-              header("location:category.php");
-            } else {
-              header("location:categoryAdd.php?error=1");
-            }
-          }
-        ?>
+          ?>
+        </div>
+        <div class="dropdown">
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                <button class="error" name="logout">Logout</button>
+            </form>
+        </div>
     </div>
 </div>
+
+<?php
+  if(isset($_POST["submitBtn"])) {
+    global $conn;
+    $name = $_POST["name"];
+    $sql = "INSERT INTO categories(name) VALUES ('$name') ";
+    $query = mysqli_query($conn, $sql);
+
+    if(mysqli_affected_rows($conn) >= 1) {
+      header("location:category.php");
+    } else {
+      header("location:categoryAdd.php?error=1");
+    }
+  }
+?>
 
 <!-- CONTAINER -->
 <div class="container">

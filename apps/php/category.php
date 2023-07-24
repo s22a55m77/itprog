@@ -17,16 +17,30 @@
 <body>
   <!-- NAVBAR -->
   <div class="navbar">
+    <?php
+      if(isset($_POST['logout'])) {
+        session_start();
+        session_destroy();
+        header("location:login.php");
+      }
+    ?>
     <div>
       <span>
         <a style="color: #fff" href="main.php"><span>Dish Management System</span></a>
       </span>
     </div>
-    <div>
-        <?php
-            echo getUsername();
-        ?>
-    </div>
+      <div class="username">
+          <div>
+            <?php
+              echo getUsername();
+            ?>
+          </div>
+          <div class="dropdown">
+              <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                  <button class="error" name="logout">Logout</button>
+              </form>
+          </div>
+      </div>
   </div>
 
   <!-- CONTAINER -->
@@ -67,53 +81,37 @@
             <th>Name</th>
             <th>Action</th>
           </tr>
-          <!-- TODO fetch data from db @Bryan -->
-          <tr>
-            <td>1</td>
-            <td>Mains</td>
-            <td style="display: flex; justify-content: center; gap: 10px">
-                <form action="delete.php" method="POST">
-                    <input hidden="true" name="type" value="category" />
-                    <!-- change the value to the id of the category                   -->
-                    <button type="submit" name="id" value="id">Delete</button>
-                </form>
-                <form action="categoryUpdate.php" method="POST">
-                    <!-- same here                   -->
-                    <button type="submit" name="id" value="1">Update</button>
-                </form>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Sides</td>
-              <td style="display: flex; justify-content: center; gap: 10px">
-                  <form action="delete.php" method="POST">
-                      <input hidden="true" name="type" value="category" />
-                      <!-- change the value to the id of the category                   -->
-                      <button type="submit" name="id" value="id">Delete</button>
-                  </form>
-                  <form action="categoryUpdate.php" method="POST">
-                      <!-- same here                   -->
-                      <button type="submit" name="id" value="id">Update</button>
-                  </form>
-              </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Drink</td>
-              <td style="display: flex; justify-content: center; gap: 10px">
-                  <form action="delete.php" method="POST">
-                      <input hidden="true" name="type" value="category" />
-                      <!-- change the value to the id of the category                   -->
-                      <button type="submit" name="id" value="id">Delete</button>
-                  </form>
-                  <form action="categoryUpdate.php" method="POST">
-                      <!-- same here                   -->
-                      <button type="submit" name="id" value="id">Update</button>
-                  </form>
-              </td>
-          </tr>
-          <!-- END OF TODO-->
+          <!-- fetch data from db -->
+          <?php
+            global $conn;
+
+            // Directly execute the SQL query and store the result set in $query
+            $sql = "SELECT id, name
+                     FROM categories
+                     ORDER BY id";
+            $query = mysqli_query($conn, $sql);
+
+            // Loop through the data and populate the table rows dynamically
+            if ($query && mysqli_num_rows($query) > 0) {
+              while ($row = mysqli_fetch_assoc($query)) {
+                echo "<tr>";
+                echo "<td>" . $row['id'] . "</td>";
+                echo "<td>" . $row['name'] . "</td>";
+                echo "<td style='display: flex; justify-content: center; gap: 10px'>";
+                echo "<form action='delete.php' method='POST'>";
+                echo "<input type='hidden' name='type' value='category' />";
+                echo "<button type='submit' name='id' value='" . $row['id'] . "'>Delete</button>";
+                echo "</form>";
+                echo "<form action='categoryUpdate.php' method='POST'>";
+                echo "<button type='submit' name='id' value='" . $row['id'] . "'>Update</button>";
+                echo "</form>";
+                echo "</td>";
+                echo "</tr>";
+              }
+            } else {
+              echo "<tr><td colspan='5'>No data found in the table.</td></tr>";
+            }
+          ?>
         </table>
       </div>
     </div>
