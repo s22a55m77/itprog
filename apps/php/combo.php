@@ -16,16 +16,30 @@
 <body>
   <!-- NAVBAR -->
   <div class="navbar">
+    <?php
+      if(isset($_POST['logout'])) {
+        session_start();
+        session_destroy();
+        header("location:login.php");
+      }
+    ?>
     <div>
       <span>
         <a style="color: #fff" href="main.php"> Dish Management System </a>
       </span>
     </div>
-    <div>
-        <?php
-            echo getUsername();
-        ?>
-    </div>
+      <div class="username">
+          <div>
+            <?php
+              echo getUsername();
+            ?>
+          </div>
+          <div class="dropdown">
+              <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+                  <button class="error" name="logout">Logout</button>
+              </form>
+          </div>
+      </div>
   </div>
 
   <!-- CONTAINER -->
@@ -66,38 +80,32 @@
         </div>  
         <table class="table">
           <tr class=table-header>
-            <th>ID</th>
             <th>Name</th>
-            <th>Dish</th>
             <th>Discount</th>
             <th>Action</th>
           </tr>
           <!-- fetch data from db -->
            <?php
              global $conn;
-             $sql = "SELECT c.id, c.name, c.discount, 
-                    d.name as dish_name
-                    FROM combos c LEFT JOIN dishes d ON c.dish_id=d.id 
+             $sql = "SELECT DISTINCT c.name, c.discount
+                    FROM combos c
                     ORDER BY c.name";
              $query = mysqli_query($conn, $sql); 
 
              if (mysqli_num_rows($query) > 0) {
                  while ($row = mysqli_fetch_assoc($query)) {
-                     echo "<tr>";
-                     echo "<td>" . $row['id'] . "</td>";
-                     echo "<td>" . $row['name'] . "</td>";
-                     echo "<td>" . $row['dish_name'] . "</td>";
-                     echo "<td>" . $row['discount'] . "</td>";
-                     echo "<td  style='display: flex; justify-content: center; gap: 10px'>
-                                <form action='delete.php' method='POST'>
-                                  <input hidden='true' name='type' value='combo' />
-                                  <button type='submit' name='id' value=".$row['id'].">Delete</button>
-                                </form>
-                                <form action='comboUpdate.php' method='POST'>
-                                  <button type='submit' name='id' value=".$row['id'].">Update</button>
-                                </form>
-                            </td>";
-                     echo "</tr>";
+                    echo "<tr>";
+                    echo "<td>" . $row['name'] . "</td>";
+                    echo "<td>" . $row['discount'] . "</td>";
+                    echo "<td  style='display: flex; justify-content: center; gap: 10px'>
+                            <form action='comboDetails.php' method='POST'>
+                              <button type='submit' name='name' value=".'"'.$row['name'].'"'.">Details</button>
+                            </form>
+                            <form action='comboUpdate.php' method='POST'>
+                                  <button type='submit' name='id' value=".$row['name'].">Update</button>
+                            </form>
+                        </td>";
+                    echo "</tr>";
                 }
             } else {
                 echo "No data found.";
