@@ -11,13 +11,18 @@ if (isset($_POST["loginBtn"])) {
                                            AND password='$pass'");
     $fetch = mysqli_fetch_array($query);
 
-    if($user==$fetch["username"] && $pass==$fetch["password"]) {
+    if (mysqli_num_rows($query) > 0) {
+      if($user==$fetch["username"] && $pass==$fetch["password"]) {
         session_start();
         $_SESSION['getLogin'] = $user;
         header("location:index.php");
+      } else {
+        header("location:login.php?error=1");
+      }
     } else {
         header("location:login.php?error=1");
     }
+
 }
 ?>
 
@@ -49,7 +54,7 @@ if (isset($_POST["loginBtn"])) {
             if(isset($_GET["error"])) {
                 $error=$_GET["error"];
                 if ($error==1) {
-                    echo "<div class='alert'>Username and/or password invalid<br/></div>";
+                    echo "<div class='alert'>Username or password invalid<br/></div>";
                 }
             }
             ?>
