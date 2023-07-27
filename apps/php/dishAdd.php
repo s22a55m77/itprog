@@ -41,7 +41,7 @@ checkLogin();
     $description = isset($_POST["description"]) ? $_POST["description"] : null;
     $price = $_POST["price"];
     $image = isset($_FILES["image"]) ? $_FILES["image"]["tmp_name"] : null;
-    if (isset($_FILES["image"])) {
+    if (isset($_FILES["image"]) && $image != null) {
       // Get the original name of the uploaded file
       $original_name = $_FILES["image"]["name"];
 
