@@ -107,7 +107,7 @@ checkLogin();
                               <button type='submit' name='name' value=".'"'.$row['name'].'"'.">Details</button>
                             </form>
                             <form action='comboUpdate.php' method='POST'>
-                                  <button type='submit' name='id' value=".$row['name'].">Update</button>
+                                  <button type='submit' name='id' value=".'"'.$row['name'].'"'.">Update</button>
                             </form>
                         </td>";
                     echo "</tr>";

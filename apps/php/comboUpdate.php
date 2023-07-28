@@ -43,13 +43,13 @@ checkLogin();
 
     if (isset($_POST["name"])) {
       $name = $_POST["name"];
-      mysqli_query($conn, "UPDATE combos SET name='$name' WHERE name = '$id'");
+      mysqli_query($conn, "UPDATE combos SET name='$name' WHERE name = '".$id."'");
       $changes_occurred = true;
     }
 
     if (isset($_POST["discount"])) {
       $discount = $_POST["discount"];
-      mysqli_query($conn, "UPDATE combos SET discount='$discount' WHERE name = '$id'");
+      mysqli_query($conn, "UPDATE combos SET discount='$discount' WHERE name = '".$id."'");
       $changes_occurred = true;
     }
 
@@ -112,11 +112,11 @@ checkLogin();
           <div class="required">Combo Name</div>
           <!--       Get Data from database            -->
           <?php
-            $sql = "SELECT * FROM combos WHERE name = '$id'";
+            $sql = "SELECT * FROM combos WHERE name = '".$id."'";
             $query = mysqli_query($conn, $sql);
             $result = mysqli_fetch_object($query);
-            echo "<input hidden name=\"id\" value=".$id." />";
-            echo "<input class=\"input\" name=\"name\" value=".$result->name." />"
+            echo "<input hidden name=\"id\" value='".$id."' />";
+            echo "<input class=\"input\" name=\"name\" value='".$result->name."' />"
           ?>
           <br />
           <div class="required">Discount</div>
