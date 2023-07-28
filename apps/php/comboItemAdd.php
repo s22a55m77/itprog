@@ -121,7 +121,7 @@ checkLogin();
             <div class="required">Dishes</div>
               <?php
                 global $conn;
-                $combo = $_GET["combo"];
+                $combo = isset($_GET["combo"]) ? $_GET["combo"] : $_SESSION["combo"];
                 echo "<input hidden='true' name='dishNum' value='$dishNum'>";
                 for ($i = 1; $i<=$dishNum; $i++) {
                   echo "<select class='input' style='height: auto' name='dish".$i."'>";
