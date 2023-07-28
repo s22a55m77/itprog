@@ -12,7 +12,7 @@ checkLogin();
 
 
 <?php
-  if(isset($_POST['file'])) {
+  if(isset($_POST['file']) && !empty($_POST['file'])) {
     $xml = new DOMDocument();
     $xml->load($_POST['file']);
     if(!$xml->schemaValidate('menu.xsd')) {
@@ -82,6 +82,10 @@ checkLogin();
       }
       header("location:dishAddXML.php?success=1");
     }
+  } else {
+      if(isset($_POST['submit'])) {
+        header("location:dishAddXML.php?error=3");
+      }
   }
 ?>
 
@@ -139,7 +143,7 @@ checkLogin();
     <div class="add-container" style="padding: 10px">
       <form action="dishAddXML.php" method="POST">
         <input type="file" name="file" />
-        <button type="submit" style="margin-top: 5px">Upload</button>
+        <button type="submit" style="margin-top: 5px" name="submit">Upload</button>
       </form>
     </div>
     <?php
@@ -150,6 +154,9 @@ checkLogin();
         }
         elseif ($error==2) {
           echo "<div class='alert'>Add Failed!<br/></div>";
+        }
+        elseif ($error==3) {
+          echo "<div class='alert'>No File!<br/></div>";
         }
       }
       if(isset($_GET["success"])) {
