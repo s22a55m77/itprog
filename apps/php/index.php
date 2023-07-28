@@ -61,7 +61,7 @@ checkLogin();
       <div class="main-container">
         <div class="card">
             <div class="card-header">
-                Total Price
+                Total Amount
             </div>
             <div class="card-content" style="font-size: 40px">
                 <?php
