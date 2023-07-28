@@ -38,12 +38,24 @@ a {
   height: 40px;
   line-height: 40px;
   margin-top: 10px;
-  transition: 1s;
+  transition: 0.2s;
+  display: flex;
+  position: relative;
 }
 
 .sidebar .menu:hover {
   color: #1890ff;
   cursor: pointer;
+}
+
+.sidebar .menu:hover #svg-border {
+  transition: 0.2s;
+  stroke: #1890ff;
+}
+
+.sidebar .menu:hover .svg-fill {
+  transition: 0.2s;
+  fill: #1890ff;
 }
 
 .sidebar .active {

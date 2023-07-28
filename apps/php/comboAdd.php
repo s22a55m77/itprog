@@ -1,6 +1,6 @@
 <?php
 require("utils.php");
-
+require("icon.php");
 checkLogin();
 ?>
 <!DOCTYPE html>
@@ -68,12 +68,21 @@ checkLogin();
     <!-- SIDEBAR -->
     <div class="sidebar">
         <a class="menu" href="category.php">
+            <div style="margin-top: 2px; margin-right: 5px">
+              <?php categoryIcon(); ?>
+            </div>
             Category
         </a>
         <a class="menu" href="dish.php">
+            <div style="margin-top: 5px; margin-right: 5px">
+              <?php dishIcon(); ?>
+            </div>
             Dish
         </a>
-        <a class="menu active" href="combo.php">
+        <a class="menu" href="combo.php">
+            <div style="margin-top: 3px; margin-right: 5px">
+              <?php comboIcon(); ?>
+            </div>
             Combo
         </a>
     </div>
