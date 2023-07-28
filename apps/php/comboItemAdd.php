@@ -121,10 +121,13 @@ checkLogin();
             <div class="required">Dishes</div>
               <?php
                 global $conn;
+                $combo = $_GET["combo"];
                 echo "<input hidden='true' name='dishNum' value='$dishNum'>";
                 for ($i = 1; $i<=$dishNum; $i++) {
                   echo "<select class='input' style='height: auto' name='dish".$i."'>";
-                  $sql = "SELECT id, name FROM dishes";
+                  $sql = "SELECT id, name FROM dishes WHERE id NOT IN (
+                            SELECT dish_id FROM combos WHERE name = '$combo'
+                          );";
                   $query = mysqli_query($conn, $sql);
 
                   while ($row = mysqli_fetch_assoc($query)) {
