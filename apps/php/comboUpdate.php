@@ -112,7 +112,7 @@ checkLogin();
           <div class="required">Combo Name</div>
           <!--       Get Data from database            -->
           <?php
-            $sql = "SELECT * FROM combos WHERE name = '$id'";
+            $sql = "SELECT * FROM combos WHERE name = '".$id."'";
             $query = mysqli_query($conn, $sql);
             $result = mysqli_fetch_object($query);
             echo "<input hidden name=\"id\" value=".$id." />";
