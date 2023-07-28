@@ -91,17 +91,23 @@ checkLogin();
                 if ($type == "combo") {
                     $sql = "SELECT c.id AS id, c.name AS name, d.name AS dish 
                             FROM combos c LEFT JOIN dishes d ON c.dish_id=d.id
-                            WHERE c.id = $id";
+                            WHERE c.name = '$id'";
                     $query = mysqli_query($conn, $sql);
-                    $result = mysqli_fetch_object($query);
+                    $comboName=  mysqli_fetch_object($query);
 
+                  echo $comboName->name;
                   echo "<tr class=table-header>";
                   echo "<th>ID</th>";
-                  echo "<th>Name</th>";
                   echo "<th>Dish</th>";
                   echo "</tr>";
-                  echo "<tr>";
-                  echo "<th>".$result->id."</th><th>".$result->name."</th><th>".$result->dish."</th>";
+
+                  $query = mysqli_query($conn, $sql);
+                  while ($result = mysqli_fetch_assoc($query)) {
+                      echo "<tr>";
+                      echo "<th>".$result['id']."</th><th>".$result['dish']."</th>";
+                  }
+
+
                 }
 
               if ($type == "comboItem") {

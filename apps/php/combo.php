@@ -90,6 +90,10 @@ checkLogin();
                     echo "<td>" . $row['name'] . "</td>";
                     echo "<td>" . $row['discount'] . "</td>";
                     echo "<td  style='display: flex; justify-content: center; gap: 10px'>
+                            <form action='delete.php' method='POST'>
+                              <input type='hidden' name='type' value='combo' />
+                              <button type='submit' name='id' value=".'"'.$row['name'].'"'.">Delete</button>
+                            </form>
                             <form action='comboDetails.php' method='POST'>
                               <button type='submit' name='name' value=".'"'.$row['name'].'"'.">Details</button>
                             </form>
