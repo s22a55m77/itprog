@@ -48,7 +48,6 @@ checkLogin();
     global $conn;
     $name = isset($_GET["combo"]) ? $_GET["combo"] : $_SESSION["combo"];
 
-    $_SESSION["combo"] = $name;
     $dishNum = $_POST["dishNum"];
 
     $query = mysqli_query($conn, "SELECT * FROM combos WHERE name='$name'");
@@ -63,7 +62,7 @@ checkLogin();
 
     if(mysqli_affected_rows($conn) >= 1) {
       header("location:combo.php");
-      unset($_SESSION["name"]);
+      unset($_SESSION["combo"]);
     } else {
       header("location:comboItemAdd.php?error=1");
     }
@@ -121,6 +120,9 @@ checkLogin();
             <div class="required">Dishes</div>
               <?php
                 global $conn;
+                if (isset($_GET["combo"]))
+                  $_SESSION["combo"] = $_GET["combo"];
+
                 $combo = isset($_GET["combo"]) ? $_GET["combo"] : $_SESSION["combo"];
                 echo "<input hidden='true' name='dishNum' value='$dishNum'>";
                 for ($i = 1; $i<=$dishNum; $i++) {
