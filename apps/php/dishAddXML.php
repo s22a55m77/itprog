@@ -80,7 +80,7 @@ checkLogin();
           }
         }
       }
-      header("location:dishAddXML.php?success=1");
+     header("location:dishAddXML.php?success=1");
     }
   } else {
       if(isset($_POST['submit'])) {
