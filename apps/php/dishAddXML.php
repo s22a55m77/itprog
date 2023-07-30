@@ -44,18 +44,32 @@ checkLogin();
             // insert failed
             if(mysqli_affected_rows($conn) < 1) {
               header("location:dishAddXML.php?error=2");
+              return;
             }
           }
         }
-        else {
+        elseif($Category['exist'] == 'false') {
           // category not exist
           global $conn;
+          //test category not exist
+          // get category id
+          $sql = "SELECT id FROM categories WHERE name = '".$Category['name']."'";
+          $query = mysqli_query($conn, $sql);
+          $result = mysqli_fetch_object($query);
+          $categoryId = $result->id;
+          echo $categoryId;
+          if(mysqli_affected_rows($conn) > 0) {
+            header("location:dishAddXML.php?error=4");
+            return;
+          }
+
           // create category
           $categoryName = $Category['name'];
           $sql = "INSERT INTO categories(name) VALUES ('$categoryName') ";
           $query = mysqli_query($conn, $sql);
           if(mysqli_affected_rows($conn) < 1) {
             header("location:dishAddXML.php?error=2");
+            return;
           }
 
           // get category id
@@ -76,6 +90,7 @@ checkLogin();
             // insert failed
             if(mysqli_affected_rows($conn) < 1) {
               header("location:dishAddXML.php?error=2");
+              return;
             }
           }
         }
@@ -157,6 +172,9 @@ checkLogin();
         }
         elseif ($error==3) {
           echo "<div class='alert'>No File!<br/></div>";
+        }
+        elseif ($error==4) {
+          echo "<div class='alert'>XML is not valid! Category already exist<br/></div>";
         }
       }
       if(isset($_GET["success"])) {
